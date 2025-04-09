@@ -59,7 +59,7 @@ Upon submission of the form (with each answer limited to 500 characters), the sy
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Pawel-Gnat/daily-stoic.git
    cd daily-stoic
    ```
 
