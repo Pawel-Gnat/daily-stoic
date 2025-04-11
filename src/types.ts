@@ -125,9 +125,9 @@ export interface ErrorResponseDto {
  */
 export interface EntryListQueryParams {
   /** Page number (1-based indexing) */
-  page?: number;
+  page: number;
   /** Number of items per page */
-  limit?: number;
+  limit: number;
   /** Sorting criteria (field:direction) */
-  sort?: string;
+  sort: string;
 }
