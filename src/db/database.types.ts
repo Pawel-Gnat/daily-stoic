@@ -24,7 +24,7 @@ export interface Database {
         Row: {
           created_at: string;
           fears_of_loss: string;
-          generate_duration: unknown;
+          generate_duration: number;
           generated_sentence: string;
           id: string;
           personal_goals: string;
@@ -34,7 +34,7 @@ export interface Database {
         Insert: {
           created_at?: string;
           fears_of_loss: string;
-          generate_duration: unknown;
+          generate_duration: number;
           generated_sentence: string;
           id?: string;
           personal_goals: string;
@@ -44,7 +44,7 @@ export interface Database {
         Update: {
           created_at?: string;
           fears_of_loss?: string;
-          generate_duration?: unknown;
+          generate_duration?: number;
           generated_sentence?: string;
           id?: string;
           personal_goals?: string;
