@@ -2,7 +2,7 @@
 
 ## 1. Przegląd struktury UI
 
-Architektura UI dla aplikacji DailyStoic składa się z czterech głównych widoków: logowanie/rejestracja, strona główna, historia wpisów i szczegóły wpisu. Aplikacja wykorzystuje styl inspirowany starożytną Grecją, ze szczególnym uwzględnieniem typografii i kolorystyki. Nawigacja jest zrealizowana przez topbar, który zapewnia dostęp do głównych sekcji aplikacji. Interfejs jest w pełni responsywny, z wykorzystaniem breakpointów Tailwind, i obsługuje zarówno widoki mobilne, jak i desktopowe.
+Architektura UI dla aplikacji DailyStoic składa się z czterech głównych widoków: logowanie/rejestracja, strona główna, historia wpisów i szczegóły wpisu. Aplikacja wykorzystuje styl inspirowany starożytną Grecją, ze szczególnym uwzględnieniem typografii i kolorystyki. Nawigacja jest zrealizowana przez navbar, który zapewnia dostęp do głównych sekcji aplikacji. Interfejs jest w pełni responsywny, z wykorzystaniem breakpointów Tailwind, i obsługuje zarówno widoki mobilne, jak i desktopowe.
 
 Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależności od tego, czy użytkownik dokonał już wpisu danego dnia. System komunikacji z użytkownikiem jest dwuwarstwowy: błędy walidacji formularza są wyświetlane inline, a błędy API i potwierdzenia operacji przez system toastów.
 
@@ -50,7 +50,7 @@ Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależno
 
 ### Widok historii wpisów
 
-- **Ścieżka**: `/history`
+- **Ścieżka**: `/entries`
 - **Główny cel**: Umożliwienie przeglądania i zarządzania wcześniejszymi wpisami
 - **Kluczowe informacje**:
   - Lista wpisów posortowanych chronologicznie (najnowsze na górze)
@@ -129,7 +129,7 @@ Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależno
 
 ## 4. Układ i struktura nawigacji
 
-### Główna nawigacja (Topbar)
+### Główna nawigacja (Navbar)
 
 - Logo/nazwa aplikacji (link do strony głównej)
 - Link "Strona główna" - prowadzi do strony głównej z formularzem/dzisiejszym wpisem
@@ -144,7 +144,7 @@ Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależno
 
 ## 5. Kluczowe komponenty
 
-### 1. Topbar
+### 1. Navbar
 
 Główny element nawigacyjny, zapewniający dostęp do wszystkich sekcji aplikacji. Zawiera logo, linki nawigacyjne i przycisk wylogowania.
 
