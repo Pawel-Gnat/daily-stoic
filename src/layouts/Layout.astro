@@ -1,11 +1,12 @@
 ---
+import { Toaster } from "@/components/ui/sonner";
 import "../styles/global.css";
 
 interface Props {
   title?: string;
 }
 
-const { title = "10x Astro Starter" } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <!doctype html>
@@ -19,6 +20,7 @@ const { title = "10x Astro Starter" } = Astro.props;
   </head>
   <body>
     <slot />
+    <Toaster />
   </body>
 </html>
 

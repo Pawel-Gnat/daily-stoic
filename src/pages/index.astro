@@ -1,8 +1,10 @@
 ---
-import Welcome from "../components/Welcome.astro";
 import Layout from "../layouts/Layout.astro";
+import IndexPageView from "../components/IndexPageView";
 ---
 
-<Layout>
-  <Welcome />
+<Layout title="Daily Stoic Reflection">
+  <main class="py-8">
+    <IndexPageView client:load />
+  </main>
 </Layout>
