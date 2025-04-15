@@ -1,5 +1,5 @@
-import ReflectionForm from "./ReflectionForm";
-import DailyEntryDisplay from "./DailyEntryDisplay";
+import { ReflectionForm } from "./ReflectionForm";
+import { DailyEntryDisplay } from "./DailyEntryDisplay";
 import { useDailyEntry } from "./hooks/useDailyEntry";
 import type { CreateEntryDto } from "@/types";
 

@@ -15,7 +15,7 @@ class OpenRouterService {
   constructor(config: OpenRouterConfig) {
     this.apiKey = config.apiKey;
     this.baseUrl = "https://openrouter.ai/api/v1";
-    this.defaultModel = config.defaultModel;
+    this.defaultModel = config.defaultModel || "openai/gpt-4o-mini";
   }
 }
 ```
@@ -107,7 +107,7 @@ class OpenRouterError extends Error {
    // src/types/openrouter.ts
    export interface OpenRouterConfig {
      apiKey: string;
-     defaultModel: string;
+     defaultModel?: string;
    }
 
    export interface ChatCompletionParams {

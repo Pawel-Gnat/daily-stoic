@@ -1,10 +1,17 @@
-import type { CreateEntryDto } from "../../types";
+import { OpenRouterService } from "./openrouter/openrouter.service";
+import type { CreateEntryDto } from "@/types";
+
+const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY;
 
 /**
  * Service for generating stoic sentences using AI
  */
 export class AIService {
-  private readonly TIMEOUT_MS = 10000; // 10 seconds timeout
+  private openRouter: OpenRouterService;
+
+  constructor() {
+    this.openRouter = new OpenRouterService({ apiKey: OPENROUTER_API_KEY });
+  }
 
   /**
    * Generates a stoic sentence based on user's answers
@@ -13,47 +20,36 @@ export class AIService {
    * @throws Error if generation fails
    */
   async generateStoicSentence(context: CreateEntryDto): Promise<{ sentence: string; duration: number }> {
+    const startTime = performance.now();
+
     try {
-      const startTime = Date.now();
+      const systemMessage = this.openRouter.createSystemMessage(
+        "You are a Stoic philosopher assistant. Generate a wise, stoic sentence that addresses the user's reflections."
+      );
 
-      // Implementacja komunikacji z OpenRouter.ai
-      const response = await this.callAIModel(context);
+      const userMessage = this.openRouter.createUserMessage(
+        `Based on these reflections:
+        - What matters most: ${context.what_matters_most}
+        - Fears of loss: ${context.fears_of_loss}
+        - Personal goals: ${context.personal_goals}
+        
+        Generate a stoic wisdom that addresses these reflections.`
+      );
 
-      const endTime = Date.now();
-      const duration = Math.round(endTime - startTime);
+      const response = await this.openRouter.createChatCompletion({
+        messages: [systemMessage, userMessage],
+        temperature: 0.7,
+        maxTokens: 500,
+      });
+
+      const duration = Math.round(performance.now() - startTime);
 
       return {
-        sentence: response,
+        sentence: response.choices[0].message.content,
         duration,
       };
     } catch (error) {
-      console.error("AI generation failed:", error);
-      throw new Error("Failed to generate stoic sentence");
-    }
-  }
-
-  /**
-   * Makes the actual API call to the AI model
-   * @param context User's answers
-   * @returns Generated sentence
-   * @throws Error if the API call fails
-   */
-  private async callAIModel(context: CreateEntryDto): Promise<string> {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), this.TIMEOUT_MS);
-
-      // TODO: Implement actual OpenRouter.ai API call
-      // This is a placeholder implementation
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      clearTimeout(timeoutId);
-      return "The Stoics taught that material things alone cannot secure happiness or virtue, and that a good person is one who finds happiness within themselves. Remember: you cannot control what happens to you, but you can always control how you respond.";
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
-        throw new Error("AI generation timed out");
-      }
-      throw error; // Re-throw other errors for upstream handling
+      throw new Error(`Failed to generate stoic sentence: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
   }
 }

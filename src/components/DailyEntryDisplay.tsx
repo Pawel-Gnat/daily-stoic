@@ -5,7 +5,7 @@ interface DailyEntryDisplayProps {
   entry: EntryDto;
 }
 
-export default function DailyEntryDisplay({ entry }: DailyEntryDisplayProps) {
+export function DailyEntryDisplay({ entry }: DailyEntryDisplayProps) {
   // Format the date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
