@@ -2,7 +2,7 @@
 
 ## 1. Przegląd struktury UI
 
-Architektura UI dla aplikacji DailyStoic składa się z czterech głównych widoków: logowanie/rejestracja, strona główna, historia wpisów i szczegóły wpisu. Aplikacja wykorzystuje styl inspirowany starożytną Grecją, ze szczególnym uwzględnieniem typografii i kolorystyki. Nawigacja jest zrealizowana przez navbar, który zapewnia dostęp do głównych sekcji aplikacji. Interfejs jest w pełni responsywny, z wykorzystaniem breakpointów Tailwind, i obsługuje zarówno widoki mobilne, jak i desktopowe.
+Architektura UI dla aplikacji DailyStoic składa się z pięciu głównych widoków: logowanie/rejestracja, strona główna, historia wpisów, przykładowe wpisy i szczegóły wpisu. Aplikacja wykorzystuje styl inspirowany starożytną Grecją, ze szczególnym uwzględnieniem typografii i kolorystyki. Nawigacja jest zrealizowana przez navbar, który zapewnia dostęp do głównych sekcji aplikacji. Interfejs jest w pełni responsywny, z wykorzystaniem breakpointów Tailwind, i obsługuje zarówno widoki mobilne, jak i desktopowe.
 
 Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależności od tego, czy użytkownik dokonał już wpisu danego dnia. System komunikacji z użytkownikiem jest dwuwarstwowy: błędy walidacji formularza są wyświetlane inline, a błędy API i potwierdzenia operacji przez system toastów.
 
@@ -67,6 +67,17 @@ Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależno
   - Modal potwierdzający przed trwałym usunięciem
   - Toast informujący o pomyślnym usunięciu
 
+### Widok przykładowych wpisów
+
+- **Ścieżka**: `/examples`
+- **Główny cel**: Umożliwienie przeglądania przykładowych wpisów
+- **Kluczowe informacje**:
+  - Lista 4 przykładowych wpisów
+- **Kluczowe komponenty**:
+  - Card (karty wpisów)
+- **UX, dostępność i bezpieczeństwo**:
+  - Wyraźne karty wpisów z datą utworzenia
+
 ### Widok szczegółów wpisu
 
 - **Ścieżka**: `/entries/:id`
@@ -100,12 +111,24 @@ Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależno
 8. Po zakończeniu generacji, system zapisuje wpis i odświeża stronę
 9. System wyświetla utworzony wpis z wygenerowaną sentencją
 
+### Przeglądanie przykładowych wpisów
+
+1. Uzytkownik nie loguje się do aplikacji
+2. Użytkownik klika w "Przykładowe wpisy" w navbarze
+3. System wyświetla stronę przykładowych wpisów
+4. Użytkownik przegląda listę wpisów
+5. Użytkownik może:
+   - Przejść do szczegółów wpisu klikając na wpis
+6. Uzytkownik nie moze:
+   - Usuwać przykładowego wpisu
+
 ### Przeglądanie historii wpisów
 
-1. Użytkownik klika w "Historia" w topbarze
-2. System wyświetla stronę historii wpisów
-3. Użytkownik przegląda listę wpisów
-4. Użytkownik może:
+1. Uzytkownik loguje się do aplikacji
+2. Użytkownik klika w "Historia" w navbarze
+3. System wyświetla stronę historii wpisów
+4. Użytkownik przegląda listę wpisów
+5. Użytkownik może:
    - Przejść do szczegółów wpisu klikając na wpis
    - Usunąć wpis klikając przycisk usuwania
    - Przejść do kolejnej/poprzedniej strony wpisów
@@ -133,7 +156,8 @@ Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależno
 
 - Logo/nazwa aplikacji (link do strony głównej)
 - Link "Strona główna" - prowadzi do strony głównej z formularzem/dzisiejszym wpisem
-- Link "Historia" - prowadzi do strony z historią wpisów
+- Link "Przykładowe wpisy" - prowadzi do strony z przykładowymi wpisami, dla nie zalogowanego uzytkownika
+- Link "Historia" - prowadzi do strony z historią wpisów, dla zalogowanego uzytkownika
 - Przycisk wylogowania - wylogowuje użytkownika i przekierowuje do strony logowania
 
 ### Nawigacja kontekstowa
