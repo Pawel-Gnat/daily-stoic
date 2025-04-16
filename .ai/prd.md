@@ -79,6 +79,29 @@ Użytkownicy często potrzebują codziennej inspiracji, aby utrzymać pozytywne 
   - Przed usunięciem wyświetlany jest modal potwierdzający operację.
   - Po usunięciu wpis jest usuwany z bazy danych i nie jest już widoczny w historii.
 
+## US-006: Bezpieczny dostęp i uwierzytelnianie
+
+- Tytuł: Bezpieczny dostęp
+- Opis: Jako użytkownik chcę mieć możliwość rejestracji i logowania się do systemu w sposób zapewniający bezpieczeństwo moich danych.
+- Kryteria akceptacji:
+
+  - Logowanie i rejestracja odbywają się na dedykowanych stronach.
+  - Logowanie wymaga podania adresu email i hasła.
+  - Rejestracja wymaga podania adresu email, nazwy uźytkownika, hasła i potwierdzenia hasła.
+  - Użytkownik NIE MOŻE korzystać z funkcji tworzenia wpisu z generowaną sentencją bez logowania się do systemu (US-003 i US-004).
+  - Użytkownik może logować się do systemu poprzez przycisk w prawym górnym rogu.
+  - Użytkownik może się wylogować z systemu poprzez przycisk w prawym górnym rogu w głównym @Layout.astro.
+  - Nie korzystamy z zewnętrznych serwisów logowania (np. Google, GitHub).
+  - Odzyskiwanie hasła powinno być możliwe.
+
+  ## US-007 Dostęp do widoków bez uwierzytelnienia
+
+  - Tytuł: Dostęp dla niezalogowanego uytkownika
+  - Opia: Jako niezalogowany uźytkownik chcę mieć dostęp do strony głównej z formularzem, ale przy próbie wysłania formularza pojawia się modal z informacją o wymaganym logowaniu i przekierowaniu do strony logowania. Dostęp do podstrony z widokiem na wpisy testowe równieź jest moźliwy.
+  - Kryteria akceptacji:
+    - Użytkownik NIE MOŻE korzystać z funkcji tworzenia wpisu z generowaną sentencją bez logowania się do systemu (US-003 i US-004).
+    - Uzytkownik ma dostęp do strony głównej oraz do podstrony wpisów testowych.
+
 ## 6. Metryki sukcesu
 
 1. Całkowity czas procesu generacji sentencji (od przesłania formularza do wyświetlenia sentencji) nie przekracza 10 sekund, przy oddzielnym monitorowaniu czasu odpowiedzi backendu i LLM.
