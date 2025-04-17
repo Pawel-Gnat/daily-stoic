@@ -2,7 +2,7 @@
 
 ## 1. Przegląd struktury UI
 
-Architektura UI dla aplikacji DailyStoic składa się z pięciu głównych widoków: logowanie/rejestracja, strona główna, historia wpisów, przykładowe wpisy i szczegóły wpisu. Aplikacja wykorzystuje styl inspirowany starożytną Grecją, ze szczególnym uwzględnieniem typografii i kolorystyki. Nawigacja jest zrealizowana przez navbar, który zapewnia dostęp do głównych sekcji aplikacji. Interfejs jest w pełni responsywny, z wykorzystaniem breakpointów Tailwind, i obsługuje zarówno widoki mobilne, jak i desktopowe.
+Architektura UI dla aplikacji DailyStoic składa się z czterech głównych widoków: logowanie/rejestracja, strona główna, historia wpisów i szczegóły wpisu. Aplikacja wykorzystuje styl inspirowany starożytną Grecją, ze szczególnym uwzględnieniem typografii i kolorystyki. Nawigacja jest zrealizowana przez navbar, który zapewnia dostęp do głównych sekcji aplikacji. Interfejs jest w pełni responsywny, z wykorzystaniem breakpointów Tailwind, i obsługuje zarówno widoki mobilne, jak i desktopowe.
 
 Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależności od tego, czy użytkownik dokonał już wpisu danego dnia. System komunikacji z użytkownikiem jest dwuwarstwowy: błędy walidacji formularza są wyświetlane inline, a błędy API i potwierdzenia operacji przez system toastów.
 
@@ -51,10 +51,11 @@ Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależno
 ### Widok historii wpisów
 
 - **Ścieżka**: `/entries`
-- **Główny cel**: Umożliwienie przeglądania i zarządzania wcześniejszymi wpisami
+- **Główny cel**: Umożliwienie przeglądania i zarządzania wcześniejszymi wpisami lub wyświetlenie przykładowych wpisów dla niezalogowanego użytkownika
 - **Kluczowe informacje**:
   - Lista wpisów posortowanych chronologicznie (najnowsze na górze)
   - Paginacja (10 wpisów na stronę)
+  - 4 przykładowe wpisy dla niezalogowanego użytkownika
 - **Kluczowe komponenty**:
   - Card (karty wpisów)
   - Button (przyciski usuwania)
@@ -66,17 +67,6 @@ Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależno
   - Jasne kontrolki paginacji
   - Modal potwierdzający przed trwałym usunięciem
   - Toast informujący o pomyślnym usunięciu
-
-### Widok przykładowych wpisów
-
-- **Ścieżka**: `/examples`
-- **Główny cel**: Umożliwienie przeglądania przykładowych wpisów
-- **Kluczowe informacje**:
-  - Lista 4 przykładowych wpisów
-- **Kluczowe komponenty**:
-  - Card (karty wpisów)
-- **UX, dostępność i bezpieczeństwo**:
-  - Wyraźne karty wpisów z datą utworzenia
 
 ### Widok szczegółów wpisu
 
@@ -156,8 +146,7 @@ Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależno
 
 - Logo/nazwa aplikacji (link do strony głównej)
 - Link "Strona główna" - prowadzi do strony głównej z formularzem/dzisiejszym wpisem
-- Link "Przykładowe wpisy" - prowadzi do strony z przykładowymi wpisami, dla nie zalogowanego uzytkownika
-- Link "Historia" - prowadzi do strony z historią wpisów, dla zalogowanego uzytkownika
+- Link "Historia" - prowadzi do strony z historią wpisów (dla zalogowanego uzytkownika) lub przykładowych wpisów (dla niezalogowanego uzytkownika)
 - Przycisk wylogowania - wylogowuje użytkownika i przekierowuje do strony logowania
 
 ### Nawigacja kontekstowa

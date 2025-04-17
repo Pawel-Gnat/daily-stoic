@@ -1,126 +1,158 @@
-# Plan implementacji widoku autoryzacji
+# Plan implementacji widoku Autentykacji
 
 ## 1. Przegląd
 
-Widok autoryzacji składa się z dwóch głównych podwidoków: logowania i rejestracji. Umożliwia użytkownikom bezpieczne utworzenie konta oraz logowanie do aplikacji. Wykorzystuje Supabase do autentykacji i zapewnia przyjazny dla użytkownika interfejs z odpowiednią walidacją i obsługą błędów.
+Widok autentykacji składa się z dwóch głównych stron: logowania i rejestracji. Umożliwia użytkownikom bezpieczne utworzenie konta oraz logowanie do aplikacji DailyStoic. Wykorzystuje Supabase do autentykacji i zapewnia przyjazny dla użytkownika interfejs z odpowiednią walidacją oraz obsługą błędów.
 
 ## 2. Routing widoku
 
 - `/login` - strona logowania
 - `/register` - strona rejestracji
-- Przekierowanie na `/` po udanej autoryzacji
-- Przekierowanie na `/login` dla nieautoryzowanych użytkowników
+- `/reset-password` - strona resetowania hasła
 
 ## 3. Struktura komponentów
 
 ```
-AuthLayout
-└── AuthCard
-    ├── LoginForm
-    │   ├── EmailInput
-    │   └── PasswordInput
-    └── RegisterForm
-        ├── EmailInput
-        ├── UsernameInput
-        └── PasswordInput
+AuthLayout (Astro)
+└── AuthCard (React)
+    ├── LoginForm (React)
+    │   ├── EmailInput (Shadcn/ui)
+    │   ├── PasswordInput (Shadcn/ui)
+    │   └── SubmitButton (Shadcn/ui)
+    └── RegisterForm (React)
+        ├── EmailInput (Shadcn/ui)
+        ├── UsernameInput (Shadcn/ui)
+        ├── PasswordInput (Shadcn/ui)
+        ├── ConfirmPasswordInput (Shadcn/ui)
+        └── SubmitButton (Shadcn/ui)
 ```
 
 ## 4. Szczegóły komponentów
 
 ### AuthLayout
 
-- Opis komponentu: Główny layout dla stron autoryzacji, zapewniający spójny wygląd
+- Opis komponentu: Layout Astro dla stron autentykacji, zapewniający spójny wygląd
 - Główne elementy: Container, tło, logo aplikacji
-- Obsługiwane interakcje: brak
-- Obsługiwana walidacja: brak
-- Typy: `{ children: ReactNode }`
-- Propsy: `children`
+- Obsługiwane interakcje: Brak (komponent statyczny)
+- Typy: Brak (komponent Astro)
+- Propsy: `title: string`, `description: string`
 
 ### AuthCard
 
-- Opis komponentu: Kontener dla formularzy autoryzacji
-- Główne elementy: Card z shadcn/ui, nagłówek, opis
-- Obsługiwane interakcje: Przełączanie między formularzami
-- Obsługiwana walidacja: brak
-- Typy: `{ variant: 'login' | 'register', onToggle: () => void }`
-- Propsy: `variant, onToggle, children`
+- Opis komponentu: Karta zawierająca formularz autentykacji
+- Główne elementy: Card z Shadcn/ui, nagłówek, opis
+- Obsługiwane interakcje: Brak (komponent prezentacyjny)
+- Typy:
+  ```typescript
+  interface AuthCardProps {
+    title: string;
+    description: string;
+    children: React.ReactNode;
+  }
+  ```
 
 ### LoginForm
 
 - Opis komponentu: Formularz logowania
-- Główne elementy: Form, EmailInput, PasswordInput, Button
-- Obsługiwane interakcje: Submit formularza, reset hasła
+- Główne elementy: Pola email i hasło, przycisk submit, link do rejestracji
+- Obsługiwane interakcje:
+  - Submisja formularza
+  - Walidacja pól
+  - Obsługa błędów
 - Obsługiwana walidacja:
-  - Email: format, wymagane pole
-  - Hasło: wymagane pole
-- Typy: `LoginFormData, ValidationErrors`
-- Propsy: `onSuccess: () => void`
+  - Email: format, wymagane
+  - Hasło: wymagane
+- Typy:
+  ```typescript
+  interface LoginFormState {
+    email: string;
+    password: string;
+    isLoading: boolean;
+    error?: string;
+  }
+  ```
 
 ### RegisterForm
 
 - Opis komponentu: Formularz rejestracji
-- Główne elementy: Form, EmailInput, UsernameInput, PasswordInput (2x)
-- Obsługiwane interakcje: Submit formularza
+- Główne elementy: Pola email, nazwa użytkownika, hasło, potwierdzenie hasła
+- Obsługiwane interakcje:
+  - Submisja formularza
+  - Walidacja pól
+  - Obsługa błędów
 - Obsługiwana walidacja:
-  - Email: format, wymagane pole, unikalność
-  - Nazwa użytkownika: długość, wymagane pole
-  - Hasło: siła, wymagane pole
-  - Potwierdzenie hasła: zgodność
-- Typy: `RegisterFormData, ValidationErrors`
-- Propsy: `onSuccess: () => void`
+  - Email: format, wymagane, unikalność
+  - Nazwa użytkownika: wymagane, min 3 znaki
+  - Hasło: min 8 znaków, wymagane
+  - Potwierdzenie hasła: zgodność z hasłem
+- Typy:
+  ```typescript
+  interface RegisterFormState {
+    email: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
+    isLoading: boolean;
+    error?: string;
+  }
+  ```
 
 ## 5. Typy
 
 ```typescript
+// Stan formularza
 interface AuthFormState {
-  email: string;
-  password: string;
-  name: string;
-  confirmPassword: string;
   isLoading: boolean;
   error?: string;
+  success?: string;
 }
 
+// Błędy walidacji
 interface ValidationErrors {
   email?: string;
+  username?: string;
   password?: string;
-  name?: string;
   confirmPassword?: string;
 }
 
-interface LoginFormData {
-  email: string;
-  password: string;
-}
-
-interface RegisterFormData {
-  email: string;
-  password: string;
-  name: string;
+// Context autentykacji
+interface AuthContextType {
+  user: UserDto | null;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (data: RegisterUserDto) => Promise<void>;
+  logout: () => Promise<void>;
 }
 ```
 
 ## 6. Zarządzanie stanem
 
-- Wykorzystanie `useForm` z react-hook-form do zarządzania formularzami
-- Custom hook `useAuth` do zarządzania stanem autoryzacji:
+- Wykorzystanie React Context dla stanu autentykacji
+- Lokalny stan formularzy z użyciem `useState`
+- Custom hook `useAuth` dla operacji autentykacji:
   ```typescript
   const useAuth = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    // metody login, register, logout, resetPassword
-    return { isLoading, error, login, register, logout, resetPassword };
+    // Implementacja hooka zarządzającego stanem autentykacji
+    // i operacjami na Supabase
   };
   ```
 
 ## 7. Integracja API
 
-- Wykorzystanie klienta Supabase do operacji auth:
-  - `supabase.auth.signUp()` - rejestracja
-  - `supabase.auth.signIn()` - logowanie
-  - `supabase.auth.resetPassword()` - reset hasła
-- Obsługa odpowiedzi i błędów API
-- Przechowywanie tokenu w bezpieczny sposób
+- Logowanie:
+  ```typescript
+  const login = async (email: string, password: string): Promise<AuthResponseDto> => {
+    const response = await supabase.auth.signInWithPassword({ email, password });
+    return response.data;
+  };
+  ```
+- Rejestracja:
+  ```typescript
+  const register = async (data: RegisterUserDto): Promise<AuthResponseDto> => {
+    const response = await supabase.auth.signUp(data);
+    return response.data;
+  };
+  ```
 
 ## 8. Interakcje użytkownika
 
@@ -128,41 +160,38 @@ interface RegisterFormData {
 
    - Wypełnienie formularza
    - Walidacja pól
-   - Wysłanie danych
+   - Submisja formularza
+   - Obsługa odpowiedzi
    - Przekierowanie po sukcesie
-   - Wyświetlenie błędów
 
 2. Rejestracja:
-
    - Wypełnienie formularza
-   - Walidacja pól w czasie rzeczywistym
-   - Wysłanie danych
-   - Przekierowanie po sukcesie
-   - Wyświetlenie błędów
-
-3. Reset hasła:
-   - Wprowadzenie emaila
-   - Wysłanie linku resetującego
-   - Potwierdzenie wysłania
+   - Walidacja pól
+   - Submisja formularza
+   - Obsługa odpowiedzi
+   - Przekierowanie do logowania
 
 ## 9. Warunki i walidacja
 
 1. Email:
 
-   - Format: poprawny email
+   - Format: regex `/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i`
    - Wymagane pole
-   - Unikalność przy rejestracji
 
-2. Hasło:
+2. Nazwa użytkownika:
 
-   - Minimum 8 znaków
-   - Wymagana duża litera
-   - Wymagana cyfra
-   - Wymagany znak specjalny
-
-3. Nazwa użytkownika:
-   - 3-30 znaków
+   - Min 3 znaki
    - Tylko litery, cyfry i podkreślenia
+   - Wymagane pole
+
+3. Hasło:
+
+   - Min 8 znaków
+   - Wymagane pole
+   - Zawiera przynajmniej jedną cyfrę i znak specjalny
+
+4. Potwierdzenie hasła:
+   - Identyczne z hasłem
    - Wymagane pole
 
 ## 10. Obsługa błędów
@@ -170,48 +199,53 @@ interface RegisterFormData {
 1. Błędy walidacji:
 
    - Wyświetlanie pod polami formularza
-   - Walidacja w czasie rzeczywistym
-   - Blokada submitu przy błędach
+   - Czerwona obwódka pola z błędem
 
 2. Błędy API:
 
-   - Niepoprawne dane logowania
-   - Zajęty email
-   - Problemy z połączeniem
+   - Toast z komunikatem błędu
+   - Resetowanie stanu loading
+   - Zachowanie wprowadzonych danych
 
-3. Obsługa:
-   - Toast notifications dla błędów
-   - Wyświetlanie w formularzu
-   - Możliwość ponowienia akcji
+3. Błędy sieci:
+   - Toast z informacją o problemie z połączeniem
+   - Możliwość ponowienia próby
 
 ## 11. Kroki implementacji
 
-1. Utworzenie podstawowej struktury:
+1. Utworzenie podstawowej struktury katalogów:
 
-   - Konfiguracja routingu Astro
-   - Utworzenie komponentów layout
-   - Implementacja AuthCard
+   ```
+   src/
+   ├── pages/
+   │   ├── login.astro
+   │   └── register.astro
+   ├── components/
+   │   └── auth/
+   │       ├── AuthCard.tsx
+   │       ├── LoginForm.tsx
+   │       └── RegisterForm.tsx
+   ├── hooks/
+   │   └── useAuth.ts
+   └── layouts/
+       └── AuthLayout.astro
+   ```
 
-2. Implementacja formularzy:
+2. Implementacja komponentów:
 
-   - Konfiguracja react-hook-form
-   - Implementacja LoginForm
-   - Implementacja RegisterForm
-   - Dodanie walidacji
+   - AuthLayout
+   - AuthCard
+   - Formularze (Login, Register)
+   - Komponenty pomocnicze
 
-3. Integracja z Supabase:
+3. Implementacja logiki:
 
-   - Konfiguracja klienta
-   - Implementacja useAuth
-   - Podłączenie formularzy do API
+   - Hook useAuth
+   - Walidacja formularzy
+   - Integracja z Supabase
 
-4. Stylizacja i dostępność:
+4. Stylizacja:
 
    - Implementacja stylów Tailwind
-   - Dodanie komponentów shadcn/ui
-   - Responsywność
-
-5. Obsługa błędów:
-
-   - Implementacja toastów
-   - Obsługa błędów API
+   - Dostosowanie komponentów Shadcn/ui
+   - RWD

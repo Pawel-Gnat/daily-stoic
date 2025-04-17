@@ -4,7 +4,7 @@
 
 ### 1.1 Users
 
-Maps to the `users` table, representing authenticated users of the application.
+Maps to the `users` table, representing authenticated users of the application. This table is managed by Supabase Auth.
 
 ### 1.2 Entries
 

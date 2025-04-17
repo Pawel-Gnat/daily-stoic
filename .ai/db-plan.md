@@ -4,6 +4,8 @@
 
 ### Tabela: users
 
+Ta tabela jest zarządzana przez Supabase Auth.
+
 - **id**: UUID, PRIMARY KEY, NOT NULL, domyślnie generowany (np. przy użyciu `gen_random_uuid()`)
 - **email**: VARCHAR(255), NOT NULL, UNIQUE
 - **name**: VARCHAR(255), NOT NULL
