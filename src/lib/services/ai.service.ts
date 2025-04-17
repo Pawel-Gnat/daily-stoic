@@ -1,4 +1,4 @@
-import { OpenRouterService } from "./openrouter/openrouter.service";
+import { OpenRouterService } from "./openrouter.service";
 import type { CreateEntryDto } from "@/types";
 
 const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY;

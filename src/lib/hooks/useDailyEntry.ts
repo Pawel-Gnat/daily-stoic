@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { useOpenRouter } from "@/lib/hooks/useOpenRouter";
 import type { CreateEntryDto, EntryDto } from "@/types";
 
-const OPENROUTER_API_KEY = import.meta.env.PUBLIC_OPENROUTER_API_KEY;
+const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY;
 
 export function useDailyEntry() {
   const [entry, setEntry] = useState<EntryDto | null>(null);
