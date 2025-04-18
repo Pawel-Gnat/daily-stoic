@@ -6,7 +6,6 @@ import {
   ChatCompletionParamsSchema,
   ChatCompletionResponseSchema,
   OpenRouterConfigSchema,
-  ResponseFormatSchema,
 } from "@/types/openrouter";
 
 export class OpenRouterError extends Error {
@@ -117,6 +116,7 @@ export class OpenRouterService {
     try {
       return await response.json();
     } catch (error) {
+      console.error("Failed to parse API response", error);
       throw new OpenRouterError("Failed to parse API response", "PARSE_ERROR", 500);
     }
   }

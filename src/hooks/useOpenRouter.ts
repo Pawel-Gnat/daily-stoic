@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { OpenRouterService, OpenRouterError } from "../lib/services/openrouter.service";
-import type { ChatCompletionResponse } from "@/types/openrouter";
 
 interface UseOpenRouterOptions {
   apiKey: string;
@@ -20,7 +19,6 @@ interface UseOpenRouterReturn {
 export function useOpenRouter({ apiKey, defaultModel }: UseOpenRouterOptions): UseOpenRouterReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const service = new OpenRouterService({ apiKey, defaultModel });
 
   const generateStoicSentence = async (context: {

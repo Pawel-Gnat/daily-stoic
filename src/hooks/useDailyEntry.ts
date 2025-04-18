@@ -1,18 +1,11 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { useOpenRouter } from "@/hooks/useOpenRouter";
 import type { CreateEntryDto, EntryDto } from "@/types";
-
-const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY;
 
 export function useDailyEntry() {
   const [entry, setEntry] = useState<EntryDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const { generateStoicSentence } = useOpenRouter({
-    apiKey: OPENROUTER_API_KEY,
-  });
 
   // Fetch today's entry if it exists
   const fetchTodayEntry = async () => {
@@ -20,7 +13,10 @@ export function useDailyEntry() {
     setError(null);
 
     try {
-      const response = await fetch("/api/entries?page=1&limit=1&sort=created_at:desc");
+      const token = localStorage.getItem("token");
+      const response = await fetch("/api/entries?page=1&limit=1&sort=created_at:desc", {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
 
       if (!response.ok) {
         const error = await response.json();
@@ -39,7 +35,6 @@ export function useDailyEntry() {
       const errorMessage = err instanceof Error ? err.message : "Failed to fetch today's entry";
       setError(errorMessage);
       toast.error(errorMessage);
-      console.error("Error fetching entry:", err);
     } finally {
       setIsLoading(false);
     }
@@ -49,39 +44,31 @@ export function useDailyEntry() {
   const createEntry = async (data: CreateEntryDto) => {
     setIsLoading(true);
     try {
-      const startTime = performance.now();
+      const token = localStorage.getItem("token");
 
-      // First, generate the stoic sentence
-      const generatedSentence = await generateStoicSentence({
-        what_matters_most: data.what_matters_most,
-        fears_of_loss: data.fears_of_loss,
-        personal_goals: data.personal_goals,
-      });
-
-      const generateDuration = Math.round(performance.now() - startTime);
-
-      // Then, save the entry with the generated sentence
       const response = await fetch("/api/entries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({
-          ...data,
-          generated_sentence: generatedSentence,
-          generate_duration: generateDuration,
-        }),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error?.message || "Failed to save entry");
+        throw new Error(errorData.error?.message || "Failed to create entry");
       }
 
       const savedEntry = await response.json();
       setEntry(savedEntry);
+      toast.success("Entry created successfully");
+
+      return savedEntry;
     } catch (error) {
-      throw error instanceof Error ? error : new Error("Failed to create entry");
+      const errorMessage = error instanceof Error ? error.message : "Failed to create entry";
+      toast.error(errorMessage);
+      throw error;
     } finally {
       setIsLoading(false);
     }
