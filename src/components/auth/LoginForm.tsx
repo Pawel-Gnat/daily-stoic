@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useAuth } from "@/lib/hooks/useAuth";
-import { useNavigate } from "@/lib/hooks/useNavigate";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "@/hooks/useNavigate";
 import { loginSchema, type LoginFormData } from "@/lib/schemas/auth.schema";
 import type { LoginUserDto } from "@/types";
 

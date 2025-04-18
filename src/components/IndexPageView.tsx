@@ -1,6 +1,6 @@
 import { ReflectionForm } from "./ReflectionForm";
 import { DailyEntryDisplay } from "./DailyEntryDisplay";
-import { useDailyEntry } from "../lib/hooks/useDailyEntry";
+import { useDailyEntry } from "../hooks/useDailyEntry";
 import type { CreateEntryDto } from "@/types";
 
 // Simple spinner for loading states

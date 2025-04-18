@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { useOpenRouter } from "@/lib/hooks/useOpenRouter";
+import { useOpenRouter } from "@/hooks/useOpenRouter";
 import type { CreateEntryDto, EntryDto } from "@/types";
 
 const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY;

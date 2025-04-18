@@ -79,7 +79,7 @@ Użytkownicy często potrzebują codziennej inspiracji, aby utrzymać pozytywne 
   - Przed usunięciem wyświetlany jest modal potwierdzający operację.
   - Po usunięciu wpis jest usuwany z bazy danych i nie jest już widoczny w historii.
 
-## US-006: Bezpieczny dostęp i uwierzytelnianie
+### US-006: Bezpieczny dostęp i uwierzytelnianie
 
 - Tytuł: Bezpieczny dostęp
 - Opis: Jako użytkownik chcę mieć możliwość rejestracji i logowania się do systemu w sposób zapewniający bezpieczeństwo moich danych.
@@ -94,13 +94,13 @@ Użytkownicy często potrzebują codziennej inspiracji, aby utrzymać pozytywne 
   - Nie korzystamy z zewnętrznych serwisów logowania (np. Google, GitHub).
   - Odzyskiwanie hasła powinno być możliwe.
 
-  ## US-007 Dostęp do widoków bez uwierzytelnienia
+### US-007 Dostęp do widoków bez uwierzytelnienia
 
-  - Tytuł: Dostęp dla niezalogowanego uytkownika
-  - Opia: Jako niezalogowany uźytkownik chcę mieć dostęp do strony głównej z formularzem, ale przy próbie wysłania formularza pojawia się modal z informacją o wymaganym logowaniu i przekierowaniu do strony logowania. Dostęp do podstrony z widokiem na wpisy testowe równieź jest moźliwy.
-  - Kryteria akceptacji:
-    - Użytkownik NIE MOŻE korzystać z funkcji tworzenia wpisu z generowaną sentencją bez logowania się do systemu (US-003 i US-004).
-    - Uzytkownik ma dostęp do strony głównej oraz do podstrony wpisów testowych.
+- Tytuł: Dostęp dla niezalogowanego uytkownika
+- Opia: Jako niezalogowany uźytkownik chcę mieć dostęp do strony głównej z formularzem, ale przy próbie wysłania formularza pojawia się modal z informacją o wymaganym logowaniu i przekierowaniu do strony logowania. Dostęp do podstrony z widokiem na wpisy testowe równieź jest moźliwy.
+- Kryteria akceptacji:
+  - Użytkownik NIE MOŻE korzystać z funkcji tworzenia wpisu z generowaną sentencją bez logowania się do systemu (US-003 i US-004).
+  - Uzytkownik ma dostęp do strony głównej oraz do podstrony wpisów testowych.
 
 ## 6. Metryki sukcesu
 

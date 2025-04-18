@@ -101,26 +101,15 @@ Aplikacja wykorzystuje dynamiczny główny widok, który zmienia się w zależno
 8. Po zakończeniu generacji, system zapisuje wpis i odświeża stronę
 9. System wyświetla utworzony wpis z wygenerowaną sentencją
 
-### Przeglądanie przykładowych wpisów
-
-1. Uzytkownik nie loguje się do aplikacji
-2. Użytkownik klika w "Przykładowe wpisy" w navbarze
-3. System wyświetla stronę przykładowych wpisów
-4. Użytkownik przegląda listę wpisów
-5. Użytkownik może:
-   - Przejść do szczegółów wpisu klikając na wpis
-6. Uzytkownik nie moze:
-   - Usuwać przykładowego wpisu
-
 ### Przeglądanie historii wpisów
 
-1. Uzytkownik loguje się do aplikacji
-2. Użytkownik klika w "Historia" w navbarze
-3. System wyświetla stronę historii wpisów
-4. Użytkownik przegląda listę wpisów
-5. Użytkownik może:
+1. Użytkownik klika w "Historia" w navbarze
+2. System wyświetla stronę historii wpisów, jeśli użytkownik jest zalogowany
+   to pokazuje historie wpisów użytkownika, jeśli nie jest zalogowany to pokazuje przykładowe wpisy
+3. Użytkownik przegląda listę wpisów
+4. Użytkownik może:
    - Przejść do szczegółów wpisu klikając na wpis
-   - Usunąć wpis klikając przycisk usuwania
+   - Usunąć wpis klikając przycisk usuwania (tylko dla zalogowanego użytkownika, w zakresie własnych wpisów)
    - Przejść do kolejnej/poprzedniej strony wpisów
 
 ### Usuwanie wpisu

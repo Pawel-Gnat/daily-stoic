@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { OpenRouterService, OpenRouterError } from "../services/openrouter.service";
+import { OpenRouterService, OpenRouterError } from "../lib/services/openrouter.service";
 import type { ChatCompletionResponse } from "@/types/openrouter";
 
 interface UseOpenRouterOptions {

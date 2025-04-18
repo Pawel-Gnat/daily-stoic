@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useOpenRouter } from "@/lib/hooks/useOpenRouter";
+import { useOpenRouter } from "@/hooks/useOpenRouter";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
