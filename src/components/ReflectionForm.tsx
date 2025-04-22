@@ -1,123 +1,80 @@
-import { useState } from "react";
-import { useOpenRouter } from "@/hooks/useOpenRouter";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 import type { CreateEntryDto } from "@/types";
+import { useForm } from "react-hook-form";
+import { createEntrySchema } from "@/lib/schemas/entry.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { TextareaField } from "./form/TextareaField";
 
 interface ReflectionFormProps {
   onEntryCreated: (data: CreateEntryDto) => Promise<void>;
 }
 
 export function ReflectionForm({ onEntryCreated }: ReflectionFormProps) {
-  const [whatMattersMost, setWhatMattersMost] = useState("");
-  const [fearsOfLoss, setFearsOfLoss] = useState("");
-  const [personalGoals, setPersonalGoals] = useState("");
-  const [generatedSentence, setGeneratedSentence] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const form = useForm<z.infer<typeof createEntrySchema>>({
+    resolver: zodResolver(createEntrySchema),
+    defaultValues: {
+      what_matters_most: "",
+      fears_of_loss: "",
+      personal_goals: "",
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setIsLoading(true);
+  const watchTextareaMattersMost = form.watch("what_matters_most");
+  const watchTextareaFearsOfLoss = form.watch("fears_of_loss");
+  const watchTextareaPersonalGoals = form.watch("personal_goals");
 
+  async function onSubmit(values: z.infer<typeof createEntrySchema>) {
     try {
-      await onEntryCreated({
-        what_matters_most: whatMattersMost,
-        fears_of_loss: fearsOfLoss,
-        personal_goals: personalGoals,
-      });
-
-      // Reset form after successful save
-      setWhatMattersMost("");
-      setFearsOfLoss("");
-      setPersonalGoals("");
-      setGeneratedSentence("");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save reflection");
-      console.error("Error:", err);
-    } finally {
-      setIsLoading(false);
+      await onEntryCreated(values);
+    } catch (error) {
+      console.error("Error:", error);
     }
-  };
+  }
 
   return (
     <Card className="p-6 max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <label htmlFor="whatMattersMost" className="block text-sm font-medium">
-            What matters most to you today?
-          </label>
-          <Textarea
-            id="whatMattersMost"
-            value={whatMattersMost}
-            onChange={(e) => setWhatMattersMost(e.target.value)}
-            maxLength={500}
-            required
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <TextareaField
+            control={form.control}
+            name="what_matters_most"
+            label="What matters most to you today?"
             placeholder="Reflect on what truly matters..."
-            className="min-h-[100px]"
-            disabled={isLoading}
+            description={`${watchTextareaMattersMost.length} / 500`}
           />
-        </div>
 
-        <div className="space-y-2">
-          <label htmlFor="fearsOfLoss" className="block text-sm font-medium">
-            What are your fears of loss?
-          </label>
-          <Textarea
-            id="fearsOfLoss"
-            value={fearsOfLoss}
-            onChange={(e) => setFearsOfLoss(e.target.value)}
-            maxLength={500}
-            required
+          <TextareaField
+            control={form.control}
+            name="fears_of_loss"
+            label="What are your fears of loss?"
             placeholder="What do you fear losing..."
-            className="min-h-[100px]"
-            disabled={isLoading}
+            description={`${watchTextareaFearsOfLoss.length} / 500`}
           />
-        </div>
 
-        <div className="space-y-2">
-          <label htmlFor="personalGoals" className="block text-sm font-medium">
-            What are your personal goals?
-          </label>
-          <Textarea
-            id="personalGoals"
-            value={personalGoals}
-            onChange={(e) => setPersonalGoals(e.target.value)}
-            maxLength={500}
-            required
+          <TextareaField
+            control={form.control}
+            name="personal_goals"
+            label="What are your personal goals?"
             placeholder="What do you want to achieve..."
-            className="min-h-[100px]"
-            disabled={isLoading}
+            description={`${watchTextareaPersonalGoals.length} / 500`}
           />
-        </div>
 
-        {error && (
-          <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        {generatedSentence && (
-          <Alert>
-            <AlertDescription className="font-medium italic">"{generatedSentence}"</AlertDescription>
-          </Alert>
-        )}
-
-        <Button type="submit" disabled={isLoading} className="w-full">
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Saving reflection...
-            </>
-          ) : (
-            "Save Reflection"
-          )}
-        </Button>
-      </form>
+          <Button type="submit" disabled={form.formState.isSubmitting} className="w-full">
+            {form.formState.isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving reflection...
+              </>
+            ) : (
+              "Save Reflection"
+            )}
+          </Button>
+        </form>
+      </Form>
     </Card>
   );
 }

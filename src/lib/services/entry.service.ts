@@ -2,9 +2,6 @@ import type { SupabaseClient } from "../../db/supabase.client";
 import type { Entry, CreateEntryDto, EntryListQueryParams, EntryListResponseDto } from "../../types";
 import { AIService } from "./ai.service";
 
-/**
- * Service for managing entries
- */
 export class EntryService {
   private aiService: AIService;
 
@@ -20,10 +17,8 @@ export class EntryService {
    * @throws Error if creation fails
    */
   async createEntry(userId: string, data: CreateEntryDto): Promise<Entry> {
-    // Generate stoic sentence
     const { sentence, duration } = await this.aiService.generateStoicSentence(data);
 
-    // Create entry in database
     const { data: entry, error } = await this.supabase
       .from("entries")
       .insert({
@@ -52,10 +47,8 @@ export class EntryService {
    * @returns Entries with pagination metadata
    */
   async getEntries(userId: string, query: EntryListQueryParams): Promise<EntryListResponseDto> {
-    // Calculate offset
     const offset = (query.page - 1) * query.limit;
 
-    // Get total count
     const { count, error: countError } = await this.supabase
       .from("entries")
       .select("*", { count: "exact", head: true })
@@ -66,7 +59,6 @@ export class EntryService {
       throw new Error("Failed to get entries");
     }
 
-    // Get entries
     const [field, direction] = query.sort.split(":") as [string, "asc" | "desc"];
     const { data: entries, error } = await this.supabase
       .from("entries")
@@ -109,7 +101,6 @@ export class EntryService {
       .single();
 
     if (error) {
-      // If no entry was found, return null
       if (error.message?.includes("No rows found")) {
         return null;
       }

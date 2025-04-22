@@ -18,7 +18,10 @@ export const ResponseFormatSchema = z.object({
     schema: z.object({
       type: z.string(),
       properties: z.object({
-        sentence: z.string(),
+        sentence: z.object({
+          type: z.string(),
+          description: z.string(),
+        }),
       }),
       required: z.array(z.string()).default(["sentence"]),
     }),

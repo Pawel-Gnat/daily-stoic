@@ -2,13 +2,7 @@ import { ReflectionForm } from "./ReflectionForm";
 import { DailyEntryDisplay } from "./DailyEntryDisplay";
 import { useDailyEntry } from "../hooks/useDailyEntry";
 import type { CreateEntryDto } from "@/types";
-
-// Simple spinner for loading states
-const Spinner = () => (
-  <div className="flex justify-center items-center min-h-[300px]">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-  </div>
-);
+import { Spinner } from "./shared/Spinner";
 
 export default function IndexPageView() {
   const { entry, isLoading, createEntry } = useDailyEntry();

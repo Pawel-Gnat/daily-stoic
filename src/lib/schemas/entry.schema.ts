@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-/**
- * Schema for validating entry creation payload
- */
 export const createEntrySchema = z.object({
   what_matters_most: z
     .string()
@@ -12,9 +9,6 @@ export const createEntrySchema = z.object({
   personal_goals: z.string().min(1, "Field cannot be empty").max(500, "Field exceeds maximum length (500 characters)"),
 });
 
-/**
- * Schema for validating entry list query parameters
- */
 export const entryListQuerySchema = z.object({
   page: z.coerce.number().int("Page must be an integer").positive("Page must be positive").optional().default(1),
   limit: z.coerce
@@ -31,7 +25,4 @@ export const entryListQuerySchema = z.object({
     .default("created_at:desc"),
 });
 
-/**
- * Schema for validating UUID parameters
- */
 export const uuidSchema = z.string().uuid("Invalid ID format");

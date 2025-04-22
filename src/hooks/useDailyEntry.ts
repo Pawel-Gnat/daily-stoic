@@ -7,7 +7,6 @@ export function useDailyEntry() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch today's entry if it exists
   const fetchTodayEntry = async () => {
     setIsLoading(true);
     setError(null);
@@ -25,7 +24,6 @@ export function useDailyEntry() {
 
       const data = await response.json();
 
-      // If we have an entry for today, set it
       if (data.data.length > 0) {
         setEntry(data.data[0]);
       } else {
@@ -40,7 +38,6 @@ export function useDailyEntry() {
     }
   };
 
-  // Create a new entry
   const createEntry = async (data: CreateEntryDto) => {
     setIsLoading(true);
     try {
@@ -74,7 +71,6 @@ export function useDailyEntry() {
     }
   };
 
-  // Load the entry data when the component mounts
   useEffect(() => {
     fetchTodayEntry();
   }, []);

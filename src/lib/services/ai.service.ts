@@ -3,9 +3,6 @@ import type { CreateEntryDto } from "@/types";
 
 const OPENROUTER_API_KEY = import.meta.env.OPENROUTER_API_KEY;
 
-/**
- * Service for generating stoic sentences using AI
- */
 export class AIService {
   private openRouter: OpenRouterService;
 
@@ -24,7 +21,7 @@ export class AIService {
 
     try {
       const systemMessage = this.openRouter.createSystemMessage(
-        "You are a Stoic philosopher assistant. Generate a wise, stoic sentence that addresses the user's reflections."
+        "You are a Stoic philosopher assistant. Generate a wise, stoic sentence that addresses the user's reflections. Please respond in language of the user's message."
       );
 
       const userMessage = this.openRouter.createUserMessage(
