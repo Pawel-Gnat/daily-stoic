@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { EntryDto } from "@/types";
+import { toast } from "sonner";
 
 export function useEntryDetail(entryId: string) {
   const [entry, setEntry] = useState<EntryDto | null>(null);
@@ -12,14 +13,14 @@ export function useEntryDetail(entryId: string) {
       const res = await fetch(`/api/entries/${entryId}`);
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error?.message || "Wystąpił błąd");
+        setError(data.error?.message || "An error occurred");
       } else {
         const data = await res.json();
         setEntry(data);
       }
     } catch (err) {
       console.error("Error fetching entry:", err);
-      setError("Wystąpił błąd podczas pobierania wpisu");
+      setError("An error occurred while fetching the entry");
     } finally {
       setLoading(false);
     }
@@ -36,12 +37,14 @@ export function useEntryDetail(entryId: string) {
         return true;
       } else {
         const data = await res.json();
-        setError(data.error?.message || "Błąd podczas usuwania wpisu");
+        setError(data.error?.message || "An error occurred while deleting the entry");
+        toast.error(data.error?.message || "Error deleting entry");
         return false;
       }
     } catch (err) {
       console.error("Error deleting entry:", err);
-      setError("Wystąpił błąd podczas usuwania wpisu");
+      setError("An error occurred while deleting the entry");
+      toast.error("Error deleting entry");
       return false;
     }
   };

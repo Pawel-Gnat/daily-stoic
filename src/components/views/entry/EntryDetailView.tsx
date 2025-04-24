@@ -1,12 +1,12 @@
 "use client";
+
 import React, { useState } from "react";
-import { useEntryDetail } from "../../hooks/useEntryDetail";
-import EntryDetailCard from "./EntryDetailCard";
-import DeleteConfirmationModal from "../DeleteConfirmationModal";
+import { useEntryDetail } from "../../../hooks/useEntryDetail.ts";
+import EntryDetailCard from "./EntryDetailCard.tsx";
+import DeleteConfirmationModal from "./DeleteConfirmationModal.tsx";
 import BackButton from "./BackButton.tsx";
-import { Toaster } from "../ui/sonner";
 import { toast } from "sonner";
-import { useNavigate } from "../../hooks/useNavigate";
+import { useNavigate } from "../../../hooks/useNavigate.ts";
 
 interface EntryDetailViewProps {
   entryId: string;
@@ -46,7 +46,6 @@ const EntryDetailView: React.FC<EntryDetailViewProps> = ({ entryId }) => {
         }}
         onCancel={() => setIsModalOpen(false)}
       />
-      <Toaster />
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import { ReflectionForm } from "./ReflectionForm";
 import { DailyEntryDisplay } from "./DailyEntryDisplay";
-import { useDailyEntry } from "../hooks/useDailyEntry";
+import { useDailyEntry } from "../../../hooks/useDailyEntry";
 import type { CreateEntryDto } from "@/types";
-import { Spinner } from "./shared/Spinner";
+import { Spinner } from "../../shared/Spinner";
 
 export default function IndexPageView() {
   const { entry, isLoading, createEntry } = useDailyEntry();

@@ -1,10 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import EntriesView from "../components/EntriesView";
+import EntriesView from "../components/views/entries/EntriesView";
 ---
 
 <Layout title="Entries - Daily Stoic">
   <main class="py-8">
-    <EntriesView client:load />
+    <EntriesView client:only="react" />
   </main>
 </Layout>

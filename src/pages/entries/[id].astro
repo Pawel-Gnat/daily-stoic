@@ -1,13 +1,14 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import EntryDetailView from "../../components/entry/EntryDetailView";
+import EntryDetailView from "../../components/views/entry/EntryDetailView";
+
 const { id } = Astro.params;
+
 if (!id) throw new Error("Entry id is missing");
-const entryId = id as string;
 ---
 
 <Layout title="Entry - Daily Stoic">
   <main class="py-8">
-    <EntryDetailView entryId={entryId} client:load />
+    <EntryDetailView entryId={id} client:load />
   </main>
 </Layout>
