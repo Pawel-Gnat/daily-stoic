@@ -2,6 +2,7 @@ import type { APIContext } from "astro";
 import { EntryService } from "../../lib/services/entry.service";
 import { createEntrySchema, entryListQuerySchema } from "../../lib/schemas/entry.schema";
 import { DEFAULT_USER_ID } from "../../db/supabase.client";
+import { DuplicateEntryError } from "../../lib/errors/entry-errors";
 
 export const prerender = false;
 
@@ -43,6 +44,12 @@ export async function POST({ request, locals }: APIContext) {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
+    if (error instanceof DuplicateEntryError) {
+      return new Response(JSON.stringify({ error: { code: "duplicate_entry", message: error.message } }), {
+        status: 409,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
     console.error("Error creating entry:", error);
 
     const errorMessage =

@@ -5,15 +5,13 @@ import type { CreateEntryDto, EntryDto } from "@/types";
 export function useDailyEntry() {
   const [entry, setEntry] = useState<EntryDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchTodayEntry = async () => {
     setIsLoading(true);
-    setError(null);
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("/api/entries?page=1&limit=1&sort=created_at:desc", {
+      const response = await fetch("/api/entries/today", {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
@@ -24,14 +22,13 @@ export function useDailyEntry() {
 
       const data = await response.json();
 
-      if (data.data.length > 0) {
-        setEntry(data.data[0]);
+      if (data) {
+        setEntry(data);
       } else {
         setEntry(null);
       }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to fetch today's entry";
-      setError(errorMessage);
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -78,7 +75,6 @@ export function useDailyEntry() {
   return {
     entry,
     isLoading,
-    error,
     createEntry,
   };
 }

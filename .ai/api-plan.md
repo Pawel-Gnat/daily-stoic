@@ -47,6 +47,7 @@ Maps to the `entries` table, representing daily stoic reflections with generated
 - Error Codes:
   - 400: Invalid input (validation errors)
   - 401: Unauthorized
+  - 409: Conflict (duplicate_entry) - entry for today already exists
   - 429: Too many requests
   - 500: AI generation error
 
@@ -122,6 +123,32 @@ Maps to the `entries` table, representing daily stoic reflections with generated
   - 401: Unauthorized
   - 403: Forbidden (not owner)
   - 404: Entry not found
+
+#### Get Today's Entry
+
+- Method: `GET`
+- Path: `/entries/today`
+- Description: Retrieve the entry created by the authenticated user for the current day
+- Authentication: Required (JWT token)
+- Query Parameters: None
+- Response (200 OK):
+
+```json
+{
+  "id": "uuid",
+  "what_matters_most": "string",
+  "fears_of_loss": "string",
+  "personal_goals": "string",
+  "generated_sentence": "string",
+  "generate_duration": number,
+  "created_at": "timestamp"
+}
+```
+
+- Error Codes:
+  - 401: Unauthorized (missing or invalid JWT token)
+  - 404: Not Found (no entry exists for today)
+  - 500: Internal Server Error
 
 ## 3. Authentication and Authorization
 

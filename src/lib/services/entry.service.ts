@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "../../db/supabase.client";
 import type { Entry, CreateEntryDto, EntryListQueryParams, EntryListResponseDto } from "../../types";
 import { AIService } from "./ai.service";
+import { DuplicateEntryError } from "../errors/entry-errors";
 
 export class EntryService {
   private aiService: AIService;
@@ -17,6 +18,11 @@ export class EntryService {
    * @throws Error if creation fails
    */
   async createEntry(userId: string, data: CreateEntryDto): Promise<Entry> {
+    const existingEntry = await this.getTodayEntry(userId);
+    if (existingEntry) {
+      throw new DuplicateEntryError("Entry for today already exists");
+    }
+
     const { sentence, duration } = await this.aiService.generateStoicSentence(data);
 
     const { data: entry, error } = await this.supabase
@@ -124,5 +130,36 @@ export class EntryService {
       console.error("Failed to delete entry:", error);
       throw new Error("Failed to delete entry");
     }
+  }
+
+  /**
+   * Retrieves today's entry
+   * @param userId User ID
+   * @returns Today's entry or null if not found
+   * @throws Error if retrieval fails
+   */
+  async getTodayEntry(userId: string): Promise<Entry | null> {
+    const today = new Date();
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
+    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
+
+    const { data, error } = await this.supabase
+      .from("entries")
+      .select("*")
+      .eq("user_id", userId)
+      .gte("created_at", startOfDay)
+      .lt("created_at", endOfDay)
+      .limit(1)
+      .single();
+
+    if (error) {
+      if (error.message?.includes("No rows found")) {
+        return null;
+      }
+      console.error("Failed to get today's entry:", error);
+      throw new Error("Failed to get today's entry");
+    }
+
+    return data;
   }
 }

@@ -163,6 +163,77 @@ import type { Tables } from "./db/database.types";
 4. Usunięcie wpisu z bazy danych Supabase
 5. Zwrócenie kodu 204 (No Content)
 
+6. Dodanie dedykowanej metody `getTodayEntry` w serwisie i implementacja endpointu pobierania dzisiejszego wpisu:
+
+   a) W pliku `src/lib/services/entry.service.ts` dodaję metodę:
+
+   ```typescript
+   /**
+    * Retrieves the entry for the current day
+    * @param userId User ID
+    * @returns Entry or null if none exists today
+    */
+   async getTodayEntry(userId: string): Promise<Entry | null> {
+     const today = new Date();
+     const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
+     const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
+
+     const { data, error } = await this.supabase
+       .from('entries')
+       .select('*')
+       .eq('user_id', userId)
+       .gte('created_at', startOfDay)
+       .lt('created_at', endOfDay)
+       .order('created_at', { ascending: false })
+       .limit(1)
+       .single();
+
+     if (error) {
+       if (error.message?.includes('No rows found')) return null;
+       console.error('Failed to get today\'s entry:', error);
+       throw new Error('Failed to get today\'s entry');
+     }
+
+     return data;
+   }
+   ```
+
+   b) W pliku `src/pages/api/entries/today.ts` tworzę endpoint:
+
+   ```typescript
+   import type { APIContext } from "astro";
+   import { EntryService } from "../../../lib/services/entry.service";
+   import { DEFAULT_USER_ID } from "../../../db/supabase.client";
+
+   export const prerender = false;
+
+   export async function GET({ locals }: APIContext) {
+     try {
+       const userId = locals.user?.id || DEFAULT_USER_ID;
+       const entryService = new EntryService(locals.supabase);
+       const entry = await entryService.getTodayEntry(userId);
+
+       if (!entry) {
+         return new Response(JSON.stringify({ error: { code: "not_found", message: "No entry for today" } }), {
+           status: 404,
+           headers: { "Content-Type": "application/json" },
+         });
+       }
+
+       return new Response(JSON.stringify(entry), {
+         status: 200,
+         headers: { "Content-Type": "application/json" },
+       });
+     } catch (error) {
+       console.error("Error fetching today's entry:", error);
+       return new Response(
+         JSON.stringify({ error: { code: "server_error", message: "Failed to retrieve today's entry" } }),
+         { status: 500, headers: { "Content-Type": "application/json" } }
+       );
+     }
+   }
+   ```
+
 ## 6. Względy bezpieczeństwa
 
 1. **Uwierzytelnianie**:
@@ -337,6 +408,30 @@ Wszystkie błędy powinny być zwracane w standardowym formacie:
 
      async deleteEntry(userId: string, entryId: string): Promise<void> {
        // Implementacja usuwania wpisu
+     }
+
+     async getTodayEntry(userId: string): Promise<Entry | null> {
+       const today = new Date();
+       const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString();
+       const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).toISOString();
+
+       const { data, error } = await this.supabase
+         .from("entries")
+         .select("*")
+         .eq("user_id", userId)
+         .gte("created_at", startOfDay)
+         .lt("created_at", endOfDay)
+         .order("created_at", { ascending: false })
+         .limit(1)
+         .single();
+
+       if (error) {
+         if (error.message?.includes("No rows found")) return null;
+         console.error("Failed to get today's entry:", error);
+         throw new Error("Failed to get today's entry");
+       }
+
+       return data;
      }
    }
    ```
@@ -590,6 +685,43 @@ Wszystkie błędy powinny być zwracane w standardowym formacie:
              message: "Wystąpił błąd podczas usuwania wpisu",
            },
          }),
+         { status: 500, headers: { "Content-Type": "application/json" } }
+       );
+     }
+   }
+   ```
+
+4. Implementacja endpointu pobierania dzisiejszego wpisu:
+
+   ```typescript
+   // src/pages/api/entries/today.ts
+   import type { APIContext } from "astro";
+   import { EntryService } from "../../../lib/services/entry.service";
+   import { DEFAULT_USER_ID } from "../../../db/supabase.client";
+
+   export const prerender = false;
+
+   export async function GET({ locals }: APIContext) {
+     try {
+       const userId = locals.user?.id || DEFAULT_USER_ID;
+       const entryService = new EntryService(locals.supabase);
+       const entry = await entryService.getTodayEntry(userId);
+
+       if (!entry) {
+         return new Response(JSON.stringify({ error: { code: "not_found", message: "No entry for today" } }), {
+           status: 404,
+           headers: { "Content-Type": "application/json" },
+         });
+       }
+
+       return new Response(JSON.stringify(entry), {
+         status: 200,
+         headers: { "Content-Type": "application/json" },
+       });
+     } catch (error) {
+       console.error("Error fetching today's entry:", error);
+       return new Response(
+         JSON.stringify({ error: { code: "server_error", message: "Failed to retrieve today's entry" } }),
          { status: 500, headers: { "Content-Type": "application/json" } }
        );
      }
