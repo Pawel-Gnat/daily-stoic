@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, Scroll } from "lucide-react";
 import type { CreateEntryDto } from "@/types";
 import { useForm } from "react-hook-form";
 import { createEntrySchema } from "@/lib/schemas/entry.schema";
@@ -36,14 +36,14 @@ export function ReflectionForm({ onEntryCreated }: ReflectionFormProps) {
   }
 
   return (
-    <Card className="p-6 max-w-2xl mx-auto">
+    <Card className="p-6 max-w-2xl">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <TextareaField
             control={form.control}
             name="what_matters_most"
             label="What matters most to you today?"
-            placeholder="Reflect on what truly matters..."
+            placeholder="Consider what truly matters to you today..."
             description={`${watchTextareaMattersMost.length} / 500`}
           />
 
@@ -51,7 +51,7 @@ export function ReflectionForm({ onEntryCreated }: ReflectionFormProps) {
             control={form.control}
             name="fears_of_loss"
             label="What are your fears of loss?"
-            placeholder="What do you fear losing..."
+            placeholder="Reflect on your today's attachments and fears..."
             description={`${watchTextareaFearsOfLoss.length} / 500`}
           />
 
@@ -59,18 +59,21 @@ export function ReflectionForm({ onEntryCreated }: ReflectionFormProps) {
             control={form.control}
             name="personal_goals"
             label="What are your personal goals?"
-            placeholder="What do you want to achieve..."
+            placeholder="Think about your current goals and aspirations..."
             description={`${watchTextareaPersonalGoals.length} / 500`}
           />
 
           <Button type="submit" disabled={form.formState.isSubmitting} className="w-full">
             {form.formState.isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
                 Saving reflection...
               </>
             ) : (
-              "Save Reflection"
+              <>
+                <Scroll className="h-4 w-4" />
+                Save Reflection
+              </>
             )}
           </Button>
         </form>
