@@ -26,12 +26,12 @@ export const TextareaField = <TFieldValues extends FieldValues, TName extends Fi
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="relative">
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Textarea placeholder={placeholder} {...field} />
+            <Textarea placeholder={placeholder} {...field} className="bg-paper" />
           </FormControl>
-          <FormDescription className="text-right">{description}</FormDescription>
+          <FormDescription className="text-right absolute right-2 bottom-1">{description}</FormDescription>
           <FormMessage />
         </FormItem>
       )}

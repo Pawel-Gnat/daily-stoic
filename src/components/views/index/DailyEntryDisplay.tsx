@@ -1,12 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { questions } from "@/lib/question-helpers";
 import type { EntryDto } from "@/types";
+import { BookOpenText, Feather } from "lucide-react";
 
 interface DailyEntryDisplayProps {
   entry: EntryDto;
 }
 
 export function DailyEntryDisplay({ entry }: DailyEntryDisplayProps) {
-  // Format the date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
@@ -20,28 +21,31 @@ export function DailyEntryDisplay({ entry }: DailyEntryDisplayProps) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Your Daily Reflection</CardTitle>
-        <p className="text-sm text-muted-foreground">{formatDate(entry.created_at)}</p>
+        <CardTitle className="flex items-center gap-2">
+          <BookOpenText className="w-4 h-4" /> {formatDate(entry.created_at)}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 text-left">
         <div className="space-y-2">
-          <h3 className="text-sm font-semibold">What matters most to you?</h3>
-          <p className="p-3 bg-muted rounded-md">{entry.what_matters_most}</p>
+          <h3 className="text-sm font-semibold">{questions[0].question}</h3>
+          <p className="p-3 bg-paper rounded-md">{entry.what_matters_most}</p>
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-sm font-semibold">What do you fear losing?</h3>
-          <p className="p-3 bg-muted rounded-md">{entry.fears_of_loss}</p>
+          <h3 className="text-sm font-semibold">{questions[1].question}</h3>
+          <p className="p-3 bg-paper rounded-md">{entry.fears_of_loss}</p>
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-sm font-semibold">What do you want to achieve?</h3>
-          <p className="p-3 bg-muted rounded-md">{entry.personal_goals}</p>
+          <h3 className="text-sm font-semibold">{questions[2].question}</h3>
+          <p className="p-3 bg-paper rounded-md">{entry.personal_goals}</p>
         </div>
 
         <div className="space-y-2 pt-4">
-          <h3 className="text-sm font-semibold">Generated Stoic Wisdom</h3>
-          <blockquote className="italic border-l-4 pl-4 py-2 bg-accent/20 rounded-r-md">
+          <h3 className="text-sm font-semibold flex items-center gap-2">
+            <Feather className="h-4 w-4" /> Stoic Wisdom
+          </h3>
+          <blockquote className="font-cinzel p-3 bg-golden/30 rounded-md text-balance">
             {entry.generated_sentence}
           </blockquote>
         </div>

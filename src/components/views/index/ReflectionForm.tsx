@@ -8,6 +8,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { TextareaField } from "../../form/TextareaField";
+import { questions } from "@/lib/question-helpers";
 
 interface ReflectionFormProps {
   onEntryCreated: (data: CreateEntryDto) => Promise<void>;
@@ -36,43 +37,43 @@ export function ReflectionForm({ onEntryCreated }: ReflectionFormProps) {
   }
 
   return (
-    <Card className="p-6 max-w-2xl">
+    <Card className="p-6 max-w-2xl text-left shadow-xl">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <TextareaField
             control={form.control}
             name="what_matters_most"
-            label="What matters most to you today?"
-            placeholder="Consider what truly matters to you today..."
+            label={questions[0].question}
+            placeholder={questions[0].placeholder}
             description={`${watchTextareaMattersMost.length} / 500`}
           />
 
           <TextareaField
             control={form.control}
             name="fears_of_loss"
-            label="What are your fears of loss?"
-            placeholder="Reflect on your today's attachments and fears..."
+            label={questions[1].question}
+            placeholder={questions[1].placeholder}
             description={`${watchTextareaFearsOfLoss.length} / 500`}
           />
 
           <TextareaField
             control={form.control}
             name="personal_goals"
-            label="What are your personal goals?"
-            placeholder="Think about your current goals and aspirations..."
+            label={questions[2].question}
+            placeholder={questions[2].placeholder}
             description={`${watchTextareaPersonalGoals.length} / 500`}
           />
 
-          <Button type="submit" disabled={form.formState.isSubmitting} className="w-full">
+          <Button type="submit" disabled={form.formState.isSubmitting} className="w-full bg-golden">
             {form.formState.isSubmitting ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Saving reflection...
+                Adding reflection...
               </>
             ) : (
               <>
                 <Scroll className="h-4 w-4" />
-                Save Reflection
+                Add Reflection
               </>
             )}
           </Button>

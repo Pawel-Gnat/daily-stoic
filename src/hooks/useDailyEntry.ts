@@ -21,22 +21,16 @@ export function useDailyEntry() {
       }
 
       const data = await response.json();
-
-      if (data) {
-        setEntry(data);
-      } else {
-        setEntry(null);
-      }
+      setEntry(data);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to fetch today's entry";
-      toast.error(errorMessage);
+      console.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
 
   const createEntry = async (data: CreateEntryDto) => {
-    setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
 
@@ -64,7 +58,6 @@ export function useDailyEntry() {
       toast.error(errorMessage);
       throw error;
     } finally {
-      setIsLoading(false);
     }
   };
 

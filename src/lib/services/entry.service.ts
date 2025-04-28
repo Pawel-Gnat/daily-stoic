@@ -153,7 +153,7 @@ export class EntryService {
       .single();
 
     if (error) {
-      if (error.message?.includes("No rows found")) {
+      if (error.code === "PGRST116") {
         return null;
       }
       console.error("Failed to get today's entry:", error);

@@ -11,7 +11,7 @@ export const NavLink = ({ href, children, className }: NavLinkProps) => {
     <a
       href={href}
       className={cn(
-        "flex flex-row gap-2 items-center bg-primary rounded-md text-primary-foreground text-sm px-4 py-2 w-fit",
+        "flex flex-row gap-2 items-center bg-golden rounded-md border border-golden text-primary text-sm px-4 py-2 w-fit hover:border-primary/30 transition-[border-color]",
         className
       )}
     >

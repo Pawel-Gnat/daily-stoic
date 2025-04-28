@@ -49,7 +49,7 @@ const useEntries = () => {
 
   useEffect(() => {
     fetchEntries(1);
-  }, [fetchEntries]);
+  }, []);
 
   return { entries, pagination, loading, error, fetchEntries };
 };

@@ -44,7 +44,7 @@ Widok jest dostępny pod ścieżką `/`.
 ### 4.3. DailyEntryDisplay
 
 - **Opis**: Komponent prezentujący szczegóły wpisu, w tym odpowiedzi użytkownika, wygenerowaną sentencję oraz datę utworzenia.
-- **Główne elementy**: Karta (Card) prezentująca pola: data utworzenia, odpowiedzi na pytania i  sentencję.
+- **Główne elementy**: Karta (Card) prezentująca pola: data utworzenia, odpowiedzi na pytania i sentencję.
 - **Obsługiwane interakcje**: Opcjonalne odświeżenie widoku (np. przycisk ponownego załadowania danych).
 - **Typy**:
   - `EntryDto`
@@ -64,9 +64,9 @@ Widok jest dostępny pod ścieżką `/`.
 
   ```typescript
   {
-  	what_matters_most: string // max 500 znaków
-  	fears_of_loss: string // max 500 znaków
-  	personal_goals: string // max 500 znaków
+    what_matters_most: string; // max 500 znaków
+    fears_of_loss: string; // max 500 znaków
+    personal_goals: string; // max 500 znaków
   }
   ```
 
@@ -74,13 +74,13 @@ Widok jest dostępny pod ścieżką `/`.
 
   ```typescript
   {
-  	id: string
-  	what_matters_most: string
-  	fears_of_loss: string
-  	personal_goals: string
-  	generated_sentence: string
-  	generate_duration: number
-  	created_at: string // ISO 8601
+    id: string;
+    what_matters_most: string;
+    fears_of_loss: string;
+    personal_goals: string;
+    generated_sentence: string;
+    generate_duration: number;
+    created_at: string; // ISO 8601
   }
   ```
 
