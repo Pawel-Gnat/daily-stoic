@@ -19,7 +19,7 @@ const { title } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body class="flex flex-col items-center min-h-screen p-4 pt-8 gap-4">
+  <body class="flex flex-col items-center min-h-screen gap-4">
     <Header />
     <slot />
     <Toaster richColors closeButton client:only="react" />

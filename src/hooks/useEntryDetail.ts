@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { EntryDto } from "@/types";
 import { toast } from "sonner";
+import { findEntryById, sampleEntries } from "@/lib/entries-helpers";
 
 export function useEntryDetail(entryId: string) {
   const [entry, setEntry] = useState<EntryDto | null>(null);
@@ -9,14 +10,28 @@ export function useEntryDetail(entryId: string) {
 
   const fetchEntry = async () => {
     setLoading(true);
+    setError(null);
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      const exampleEntry = findEntryById(entryId);
+      if (exampleEntry) {
+        setEntry(exampleEntry);
+      } else {
+        setError("Example entry not found");
+      }
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch(`/api/entries/${entryId}`);
-      if (!res.ok) {
-        const data = await res.json();
-        setError(data.error?.message || "An error occurred");
-      } else {
+      if (res.ok) {
         const data = await res.json();
         setEntry(data);
+      } else {
+        const data = await res.json();
+        setError(data.error?.message || "An error occurred");
       }
     } catch (err) {
       console.error("Error fetching entry:", err);

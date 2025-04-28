@@ -1,41 +1,55 @@
-"use client";
-import React from "react";
 import type { EntryDto } from "@/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BookOpenText, Feather } from "lucide-react";
+import { questions } from "@/lib/question-helpers";
 
 interface EntryDetailCardProps {
   entry: EntryDto;
 }
 
-const EntryDetailCard: React.FC<EntryDetailCardProps> = ({ entry }) => {
-  return (
-    <div className="bg-white shadow rounded p-6">
-      <h2 className="text-2xl font-bold mb-4">Entry Details</h2>
-      <div className="mb-2">
-        <strong>What matters most to you?</strong>
-        <p>{entry.what_matters_most}</p>
-      </div>
-      <div className="mb-2">
-        <strong>What are you afraid of losing?</strong>
-        <p>{entry.fears_of_loss}</p>
-      </div>
-      <div className="mb-2">
-        <strong>What are your goals?</strong>
-        <p>{entry.personal_goals}</p>
-      </div>
-      <div className="mb-2">
-        <strong>Generated sentence:</strong>
-        <p>{entry.generated_sentence}</p>
-      </div>
-      <div className="mb-2">
-        <strong>Generation duration:</strong>
-        <p>{entry.generate_duration} seconds</p>
-      </div>
-      <div className="mb-2">
-        <strong>Created at:</strong>
-        <p>{new Date(entry.created_at).toLocaleString()}</p>
-      </div>
-    </div>
-  );
-};
+export function EntryDetailCard({ entry }: EntryDetailCardProps) {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }).format(date);
+  };
 
-export default EntryDetailCard;
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <BookOpenText className="w-4 h-4" /> {formatDate(entry.created_at)}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6 text-left">
+        <div className="space-y-2">
+          <h3 className="text-sm font-semibold">{questions[0].question}</h3>
+          <p className="p-3 bg-paper rounded-md">{entry.what_matters_most}</p>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="text-sm font-semibold">{questions[1].question}</h3>
+          <p className="p-3 bg-paper rounded-md">{entry.fears_of_loss}</p>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="text-sm font-semibold">{questions[2].question}</h3>
+          <p className="p-3 bg-paper rounded-md">{entry.personal_goals}</p>
+        </div>
+
+        <div className="space-y-2 pt-4">
+          <h3 className="text-sm font-semibold flex items-center gap-2">
+            <Feather className="h-4 w-4" /> Stoic Wisdom
+          </h3>
+          <blockquote className="font-cinzel p-3 bg-golden/30 rounded-md text-balance">
+            {entry.generated_sentence}
+          </blockquote>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

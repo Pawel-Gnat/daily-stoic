@@ -1,18 +1,11 @@
-"use client";
-import React from "react";
-import { useNavigate } from "@/hooks/useNavigate";
+import { NavLink } from "@/components/navigation/NavLink";
+import { ArrowBigLeft } from "lucide-react";
 
-const BackButton: React.FC = () => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate("/entries");
-  };
-
+const BackButton = () => {
   return (
-    <button onClick={handleClick} className="bg-gray-200 px-4 py-2 rounded mb-4">
-      Back
-    </button>
+    <NavLink href="/entries" className="w-fit bg-paper">
+      <ArrowBigLeft className="w-4 h-4" /> Back
+    </NavLink>
   );
 };
 

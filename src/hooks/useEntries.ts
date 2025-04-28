@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type { EntryDto, EntryListResponseDto, PaginationMetadata } from "../types";
 import { toast } from "sonner";
-import { sampleEntries } from "../db/sample-entries";
+import { sampleEntries } from "@/lib/entries-helpers";
 
 const useEntries = () => {
   const [entries, setEntries] = useState<EntryDto[]>([]);

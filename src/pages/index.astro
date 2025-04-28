@@ -1,10 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import IndexPageView from "../components/views/index/IndexPageView";
+import Main from "@/components/Main";
 ---
 
 <Layout title="Daily Stoic Reflection">
-  <main>
+  <Main>
     <IndexPageView client:load />
-  </main>
+  </Main>
 </Layout>

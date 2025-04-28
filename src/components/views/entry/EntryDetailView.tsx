@@ -1,20 +1,20 @@
-"use client";
-
-import React, { useState } from "react";
 import { useEntryDetail } from "../../../hooks/useEntryDetail.ts";
-import EntryDetailCard from "./EntryDetailCard.tsx";
 import DeleteConfirmationModal from "./DeleteConfirmationModal.tsx";
 import BackButton from "./BackButton.tsx";
 import { toast } from "sonner";
 import { useNavigate } from "../../../hooks/useNavigate.ts";
+import { Spinner } from "@/components/shared/Spinner.tsx";
+import { EntryDetailCard } from "./EntryDetailCard.tsx";
+import { Container } from "@/components/shared/Container.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { BookX } from "lucide-react";
 
 interface EntryDetailViewProps {
   entryId: string;
 }
 
-const EntryDetailView: React.FC<EntryDetailViewProps> = ({ entryId }) => {
+const EntryDetailView = ({ entryId }: EntryDetailViewProps) => {
   const { entry, loading, error, deleteEntry } = useEntryDetail(entryId);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -27,26 +27,25 @@ const EntryDetailView: React.FC<EntryDetailViewProps> = ({ entryId }) => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Spinner />;
   if (error) return <div>Error: {error}</div>;
   if (!entry) return <div>Entry not found</div>;
 
   return (
-    <div className="p-4">
-      <BackButton />
+    <Container>
+      <div className="flex justify-between items-center">
+        <BackButton />
+        <DeleteConfirmationModal
+          trigger={
+            <Button variant="destructive">
+              <BookX className="w-4 h-4" /> Delete Entry
+            </Button>
+          }
+          onConfirm={handleDelete}
+        />
+      </div>
       <EntryDetailCard entry={entry} />
-      <button onClick={() => setIsModalOpen(true)} className="mt-4 bg-red-500 text-white px-4 py-2 rounded">
-        Delete Entry
-      </button>
-      <DeleteConfirmationModal
-        isOpen={isModalOpen}
-        onConfirm={() => {
-          setIsModalOpen(false);
-          handleDelete();
-        }}
-        onCancel={() => setIsModalOpen(false)}
-      />
-    </div>
+    </Container>
   );
 };
 

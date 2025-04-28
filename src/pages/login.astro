@@ -3,15 +3,16 @@ import Layout from "@/layouts/Layout.astro";
 import { AuthCard } from "@/components/views/auth/AuthCard";
 import { LoginForm } from "@/components/views/auth/LoginForm";
 import { Container } from "@/components/shared/Container";
+import Main from "@/components/Main";
 ---
 
 <Layout title="Login - Daily Stoic">
-  <main class="flex items-center flex-1 w-full">
-    <Container className="flex flex-col gap-4 text-center">
+  <Main className="flex items-center flex-1 w-full">
+    <Container className="text-center">
       <p class="font-cinzel text-xl">Your Stoic journey awaits.</p>
       <AuthCard client:load>
         <LoginForm client:load />
       </AuthCard>
     </Container>
-  </main>
+  </Main>
 </Layout>

@@ -3,15 +3,16 @@ import Layout from "@/layouts/Layout.astro";
 import { AuthCard } from "@/components/views/auth/AuthCard";
 import { RegisterForm } from "@/components/views/auth/RegisterForm";
 import { Container } from "@/components/shared/Container";
+import Main from "@/components/Main";
 ---
 
 <Layout title="Register - Daily Stoic">
-  <main class="flex items-center flex-1 w-full">
-    <Container className="flex flex-col gap-4 text-center">
+  <Main className="flex items-center flex-1 w-full">
+    <Container className="text-center">
       <p class="font-cinzel text-xl">Start your path of reflection.</p>
       <AuthCard client:load>
         <RegisterForm client:load />
       </AuthCard>
     </Container>
-  </main>
+  </Main>
 </Layout>

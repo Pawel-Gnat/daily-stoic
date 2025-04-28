@@ -1,5 +1,5 @@
 import { ReflectionForm } from "./ReflectionForm";
-import { DailyEntryDisplay } from "./DailyEntryDisplay";
+import { EntryDetailCard } from "../entry/EntryDetailCard";
 import { useDailyEntry } from "../../../hooks/useDailyEntry";
 import type { CreateEntryDto } from "@/types";
 import { Spinner } from "../../shared/Spinner";
@@ -14,16 +14,10 @@ export default function IndexPageView() {
     await createEntry(formData);
   };
 
-  if (isLoading) {
-    return (
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <Spinner />
-      </div>
-    );
-  }
+  if (isLoading) return <Spinner />;
 
   return (
-    <Container className="flex flex-col gap-4 text-center">
+    <Container className="text-center">
       <p className="font-cinzel text-xl">
         Discover ancient wisdom through personal reflection. Answer three questions to receive a personalized Stoic
         perspective on your life&apos;s journey.
@@ -32,7 +26,7 @@ export default function IndexPageView() {
         <ScrollText className="h-4 w-4" /> View Example Reflections
       </NavLink>
       <div className="mt-6">
-        {entry ? <DailyEntryDisplay entry={entry} /> : <ReflectionForm onEntryCreated={handleEntryCreated} />}
+        {entry ? <EntryDetailCard entry={entry} /> : <ReflectionForm onEntryCreated={handleEntryCreated} />}
       </div>
     </Container>
   );

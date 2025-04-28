@@ -1,10 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import EntriesViewPage from "../components/views/entries/EntriesViewPage";
+import Main from "@/components/Main";
 ---
 
 <Layout title="Entries - Daily Stoic">
-  <main>
-    <EntriesViewPage client:only="react" />
-  </main>
+  <Main>
+    <EntriesViewPage client:load />
+  </Main>
 </Layout>
