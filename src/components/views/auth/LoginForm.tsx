@@ -1,16 +1,13 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "@/hooks/useNavigate";
 import { loginSchema, type LoginFormData } from "@/lib/schemas/auth.schema";
-import type { LoginUserDto } from "@/types";
 import { Form } from "@/components/ui/form";
 import { toast } from "sonner";
 import { TextField } from "@/components/form/TextField";
 
 export function LoginForm() {
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const form = useForm<LoginFormData>({
@@ -23,15 +20,18 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const loginData: LoginUserDto = {
-        email: data.email,
-        password: data.password,
-      };
-      await login(loginData);
+      const res = await fetch("/api/auth/sign-in", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      });
+      const payload = await res.json();
+      if (!res.ok) throw new Error(payload.error);
+      toast.success("Successfully logged in!");
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("An error occurred during login.");
+      toast.error(error.message || "An error occurred during login.");
     }
   };
 
@@ -45,9 +45,12 @@ export function LoginForm() {
           {form.formState.isSubmitting ? "Logging in..." : "Log in"}
         </Button>
 
-        <div className="text-center text-sm">
+        <div className="text-center text-sm flex flex-col gap-2">
           <a href="/register" className="text-primary hover:underline">
             Don&apos;t have an account? Sign up
+          </a>
+          <a href="/forgot-password" className="text-primary hover:underline">
+            Forgot your password?
           </a>
         </div>
       </form>

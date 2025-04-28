@@ -1,16 +1,13 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "@/hooks/useNavigate";
 import { registerSchema, type RegisterFormData } from "@/lib/schemas/auth.schema";
-import type { RegisterUserDto } from "@/types";
 import { toast } from "sonner";
 import { Form } from "@/components/ui/form";
 import { TextField } from "@/components/form/TextField";
 
 export function RegisterForm() {
-  const { register: registerUser } = useAuth();
   const navigate = useNavigate();
 
   const form = useForm<RegisterFormData>({
@@ -25,16 +22,22 @@ export function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const registerData: RegisterUserDto = {
-        email: data.email,
-        password: data.password,
-        name: data.name,
-      };
-      await registerUser(registerData);
+      const res = await fetch("/api/auth/sign-up", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          password: data.password,
+        }),
+      });
+      const payload = await res.json();
+      if (!res.ok) throw new Error(payload.error);
+      toast.success("Registration successful! Please check your email to confirm your account.");
       navigate("/login?registered=true");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("An error occurred during registration.");
+      toast.error(error.message || "An error occurred during registration.");
     }
   };
 

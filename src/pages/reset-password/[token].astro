@@ -1,25 +1,23 @@
 ---
-export const prerender = false;
-
 import Layout from "@/layouts/Layout.astro";
 import { AuthCard } from "@/components/views/auth/AuthCard";
-import { LoginForm } from "@/components/views/auth/LoginForm";
+import { ResetPasswordForm } from "@/components/views/auth/ResetPasswordForm";
 import { Container } from "@/components/shared/Container";
 import Main from "@/components/Main";
 
-const { user } = Astro.locals;
+const token = Astro.params.token;
 
-if (!user) {
-  return Astro.redirect("/");
+if (!token) {
+  throw new Error("Reset token is missing");
 }
 ---
 
-<Layout title="Login - Daily Stoic">
+<Layout title="Reset Password - Daily Stoic">
   <Main className="flex items-center flex-1 w-full">
     <Container className="text-center">
-      <p class="font-cinzel text-xl">Your Stoic journey awaits.</p>
+      <p class="font-cinzel text-xl">Set your new password.</p>
       <AuthCard client:load>
-        <LoginForm client:load />
+        <ResetPasswordForm client:load token={token} />
       </AuthCard>
     </Container>
   </Main>

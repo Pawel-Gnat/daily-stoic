@@ -11,6 +11,7 @@ interface TextFieldProps<
   name: TName;
   label: string;
   placeholder: string;
+  type?: React.ComponentProps<typeof Input>["type"];
 }
 
 export const TextField = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>({
@@ -18,6 +19,7 @@ export const TextField = <TFieldValues extends FieldValues, TName extends FieldP
   name,
   label,
   placeholder,
+  type = "text",
 }: TextFieldProps<TFieldValues, TName>) => {
   return (
     <FormField
@@ -27,7 +29,7 @@ export const TextField = <TFieldValues extends FieldValues, TName extends FieldP
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} {...field} className="bg-paper" />
+            <Input type={type} placeholder={placeholder} {...field} className="bg-paper" />
           </FormControl>
           <FormMessage />
         </FormItem>

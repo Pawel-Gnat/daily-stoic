@@ -102,11 +102,21 @@ export function useAuth() {
 
   const logout = async () => {
     try {
-      const { error } = await supabaseClient.auth.signOut();
-      if (error) throw error;
+      const res = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error);
+      }
+      // Clear client-side session
+      setUser(null);
       toast.success("Successfully logged out!");
-    } catch (error) {
-      toast.error("Failed to log out.");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.message || "Failed to log out.");
       throw error;
     }
   };
