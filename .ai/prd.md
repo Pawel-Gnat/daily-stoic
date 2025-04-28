@@ -100,6 +100,7 @@ Użytkownicy często potrzebują codziennej inspiracji, aby utrzymać pozytywne 
 - Opia: Jako niezalogowany uźytkownik chcę mieć dostęp do strony głównej z formularzem, ale przycisk formularza jest w stanie zablokowanym, podobnie jak wszystkie jego inputy. Dostęp do podstrony z widokiem na wpisy testowe jest moźliwy.
 - Kryteria akceptacji:
   - Użytkownik NIE MOŻE korzystać z funkcji tworzenia wpisu z generowaną sentencją bez logowania się do systemu (US-003 i US-004).
+  - Użytkownik bez uwierzytelnienia nie ma dostępu do widoczności komponentu usuwania wpisu z podstrony szczegółu wpisu.
   - Uzytkownik ma dostęp do strony głównej oraz do podstrony wpisów testowych.
 
 ## 6. Metryki sukcesu
