@@ -1,6 +1,5 @@
 import { Brain, DoorOpen, Landmark, ScrollText, Sprout } from "lucide-react";
 import { NavLink } from "./NavLink";
-import { useCallback } from "react";
 import { useNavigate } from "@/hooks/useNavigate";
 import type { UserDto } from "@/types";
 import { Button } from "../shared/Button";
@@ -14,7 +13,6 @@ export const Navigation = ({ user }: Props) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    console.log("test");
     try {
       const res = await fetch("/api/auth/logout", {
         method: "POST",
@@ -28,10 +26,9 @@ export const Navigation = ({ user }: Props) => {
       }
 
       navigate("/login");
-      // toast.success("Successfully logged out!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      toast.error(error.message || "Failed to log out.");
+      toast.error(error instanceof Error ? error.message : "Failed to log out.");
       throw error;
     }
   };

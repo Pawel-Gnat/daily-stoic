@@ -6,15 +6,17 @@ import { useNavigate } from "../../../hooks/useNavigate.ts";
 import { Spinner } from "@/components/shared/Spinner.tsx";
 import { EntryDetailCard } from "./EntryDetailCard.tsx";
 import { Container } from "@/components/shared/Container.tsx";
-import { Button } from "@/components/ui/button.tsx";
 import { BookX } from "lucide-react";
+import type { UserDto } from "@/types";
+import { Button } from "@/components/ui/button";
 
 interface EntryDetailViewProps {
   entryId: string;
+  user: UserDto | undefined;
 }
 
-const EntryDetailView = ({ entryId }: EntryDetailViewProps) => {
-  const { entry, loading, error, deleteEntry } = useEntryDetail(entryId);
+const EntryDetailView = ({ entryId, user }: EntryDetailViewProps) => {
+  const { entry, loading, error, deleteEntry } = useEntryDetail({ entryId, user });
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -35,14 +37,16 @@ const EntryDetailView = ({ entryId }: EntryDetailViewProps) => {
     <Container>
       <div className="flex justify-between items-center">
         <BackButton />
-        <DeleteConfirmationModal
-          trigger={
-            <Button variant="destructive">
-              <BookX className="w-4 h-4" /> Delete Entry
-            </Button>
-          }
-          onConfirm={handleDelete}
-        />
+        {user && (
+          <DeleteConfirmationModal
+            trigger={
+              <Button variant="destructive">
+                <BookX className="w-4 h-4" /> Delete Entry
+              </Button>
+            }
+            onConfirm={handleDelete}
+          />
+        )}
       </div>
       <EntryDetailCard entry={entry} />
     </Container>

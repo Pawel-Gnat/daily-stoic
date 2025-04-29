@@ -15,40 +15,40 @@ const useEntries = ({ user }: Props) => {
     total_items: 0,
     has_next: false,
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // const params = new URLSearchParams(window.location.search);
-  // const page = params.get("page") || 1;
 
-  const fetchEntries = useCallback(async (page: number = 1) => {
-    if (!user) {
-      setEntries(sampleEntries.data);
-      setPagination(sampleEntries.pagination);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch(`/api/entries?page=${page}&limit=10`);
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
+  const fetchEntries = useCallback(
+    async (page = 1) => {
+      if (!user) {
+        setEntries(sampleEntries.data);
+        setPagination(sampleEntries.pagination);
+        setLoading(false);
+        return;
       }
 
-      const data: EntryListResponseDto = await res.json();
-      setEntries(data.data);
-      setPagination(data.pagination);
-    } catch (err: any) {
-      setError(err.message || "Error fetching entries");
-      toast.error(err.message || "Error fetching entries");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      try {
+        const res = await fetch(`/api/entries?page=${page}&limit=10`);
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const data: EntryListResponseDto = await res.json();
+        setEntries(data.data);
+        setPagination(data.pagination);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : "Error fetching entries");
+        toast.error(err instanceof Error ? err.message : "Error fetching entries");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user]
+  );
 
   useEffect(() => {
     fetchEntries(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { entries, pagination, loading, error, fetchEntries };

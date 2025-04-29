@@ -22,7 +22,7 @@ const EntriesViewPage = ({ user }: Props) => {
       </p>
       <div className="flex flex-wrap gap-4 justify-center">
         {error && <div>Error: {error}</div>}
-        {entries.length === 0 && <NoEntriesCard />}
+        {!loading && entries.length === 0 && <NoEntriesCard />}
         {entries.map((entry) => (
           <EntryCard key={entry.id} entry={entry} />
         ))}

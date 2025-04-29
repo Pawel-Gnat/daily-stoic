@@ -1,7 +1,6 @@
 import type { APIContext } from "astro";
 import { EntryService } from "../../../lib/services/entry.service";
 import { uuidSchema } from "../../../lib/schemas/entry.schema";
-import { DEFAULT_USER_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 
@@ -10,7 +9,6 @@ export const prerender = false;
  */
 export async function GET({ params, locals }: APIContext) {
   try {
-    // Validate ID parameter
     const result = uuidSchema.safeParse(params.id);
     if (!result.success) {
       return new Response(
@@ -22,20 +20,21 @@ export async function GET({ params, locals }: APIContext) {
         }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json" },
         }
       );
     }
 
-    // In a production environment, we would get the user ID from the JWT token
-    // For now, we use the default user ID as per instructions
-    const userId = DEFAULT_USER_ID;
+    const userId = locals.user?.id;
 
-    // Get entry using the entry service
+    if (!userId) {
+      return new Response(JSON.stringify({ error: { code: "unauthorized", message: "Unauthorized" } }), {
+        status: 401,
+      });
+    }
+
     const entryService = new EntryService(locals.supabase);
     const entry = await entryService.getEntry(userId, result.data);
 
-    // Check if entry exists
     if (!entry) {
       return new Response(
         JSON.stringify({
@@ -46,15 +45,12 @@ export async function GET({ params, locals }: APIContext) {
         }),
         {
           status: 404,
-          headers: { "Content-Type": "application/json" },
         }
       );
     }
 
-    // Return entry
     return new Response(JSON.stringify(entry), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     console.error("Error fetching entry:", error);
@@ -68,7 +64,6 @@ export async function GET({ params, locals }: APIContext) {
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
       }
     );
   }
@@ -79,7 +74,6 @@ export async function GET({ params, locals }: APIContext) {
  */
 export async function DELETE({ params, locals }: APIContext) {
   try {
-    // Validate ID parameter
     const result = uuidSchema.safeParse(params.id);
     if (!result.success) {
       return new Response(
@@ -91,16 +85,18 @@ export async function DELETE({ params, locals }: APIContext) {
         }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json" },
         }
       );
     }
 
-    // In a production environment, we would get the user ID from the JWT token
-    // For now, we use the default user ID as per instructions
-    const userId = DEFAULT_USER_ID;
+    const userId = locals.user?.id;
 
-    // First check if the entry exists
+    if (!userId) {
+      return new Response(JSON.stringify({ error: { code: "unauthorized", message: "Unauthorized" } }), {
+        status: 401,
+      });
+    }
+
     const entryService = new EntryService(locals.supabase);
     const entry = await entryService.getEntry(userId, result.data);
 
@@ -114,15 +110,12 @@ export async function DELETE({ params, locals }: APIContext) {
         }),
         {
           status: 404,
-          headers: { "Content-Type": "application/json" },
         }
       );
     }
 
-    // Delete entry
     await entryService.deleteEntry(userId, result.data);
 
-    // Return success with no content
     return new Response(null, { status: 204 });
   } catch (error) {
     console.error("Error deleting entry:", error);
@@ -136,7 +129,6 @@ export async function DELETE({ params, locals }: APIContext) {
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
       }
     );
   }

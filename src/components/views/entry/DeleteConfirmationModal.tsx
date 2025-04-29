@@ -9,6 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 interface DeleteConfirmationModalProps {
   onConfirm: () => void;
@@ -27,8 +28,12 @@ const DeleteConfirmationModal = ({ trigger, onConfirm }: DeleteConfirmationModal
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
+          <Button asChild variant="outline">
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+          </Button>
+          <Button asChild variant="destructive">
+            <AlertDialogAction onClick={onConfirm}>Continue</AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

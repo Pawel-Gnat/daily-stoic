@@ -15,10 +15,7 @@ export function useDailyEntry({ user }: Props) {
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/api/entries/today", {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      const response = await fetch("/api/entries/today");
 
       if (!response.ok) {
         const error = await response.json();
@@ -40,13 +37,10 @@ export function useDailyEntry({ user }: Props) {
     setIsLoading(true);
 
     try {
-      const token = localStorage.getItem("token");
-
       const response = await fetch("/api/entries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(data),
       });
@@ -72,6 +66,7 @@ export function useDailyEntry({ user }: Props) {
 
   useEffect(() => {
     fetchTodayEntry();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

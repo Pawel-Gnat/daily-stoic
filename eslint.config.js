@@ -56,11 +56,21 @@ const reactConfig = tseslint.config({
   },
 });
 
+const hooksConfig = tseslint.config({
+  files: ["src/hooks/**/*.ts"],
+  rules: {
+    // disable React-Compiler optimizations on hook files
+    "react-compiler/react-compiler": "off",
+  },
+});
+
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
+  { ignores: ["src/components/ui/**"] },
   baseConfig,
   jsxA11yConfig,
   reactConfig,
+  hooksConfig,
   eslintPluginAstro.configs["flat/recommended"],
   eslintPluginPrettier
 );

@@ -4,12 +4,13 @@ import EntryDetailView from "../../components/views/entry/EntryDetailView";
 import Main from "@/components/Main";
 
 const { id } = Astro.params;
-
 if (!id) throw new Error("Entry id is missing");
+
+const { user } = Astro.locals;
 ---
 
 <Layout title="Entry - Daily Stoic">
   <Main>
-    <EntryDetailView entryId={id} client:load />
+    <EntryDetailView entryId={id} user={user} client:load />
   </Main>
 </Layout>

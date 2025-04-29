@@ -10,7 +10,7 @@ export const Header = ({ user }: Props) => {
   return (
     <header className="flex flex-col gap-2 justify-between items-center px-4 pt-8">
       <Logo />
-      <Navigation user={user}/>
+      <Navigation user={user} />
     </header>
   );
 };

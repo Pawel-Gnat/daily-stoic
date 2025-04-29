@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shared/Button";
 import { useNavigate } from "@/hooks/useNavigate";
 import { registerSchema, type RegisterFormData } from "@/lib/schemas/auth.schema";
 import { toast } from "sonner";
@@ -24,7 +24,6 @@ export function RegisterForm() {
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: data.name,
           email: data.email,
@@ -35,9 +34,9 @@ export function RegisterForm() {
       if (!res.ok) throw new Error(payload.error);
 
       navigate("/login?registered=true");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      toast.error(error.message || "An error occurred during registration.");
+      toast.error(error instanceof Error ? error.message : "An error occurred during registration.");
     }
   };
 
@@ -54,7 +53,7 @@ export function RegisterForm() {
           placeholder="Confirm your password"
         />
 
-        <Button type="submit" className="w-full bg-golden" disabled={form.formState.isSubmitting}>
+        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? "Creating account..." : "Create account"}
         </Button>
 

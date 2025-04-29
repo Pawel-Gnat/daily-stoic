@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
-import type { EntryDto } from "@/types";
+import type { EntryDto, UserDto } from "@/types";
 import { toast } from "sonner";
-import { findEntryById, sampleEntries } from "@/lib/entries-helpers";
+import { findEntryById } from "@/lib/entries-helpers";
 
-export function useEntryDetail(entryId: string) {
+interface UseEntryDetailProps {
+  entryId: string;
+  user: UserDto | undefined;
+}
+
+export function useEntryDetail({ entryId, user }: UseEntryDetailProps) {
   const [entry, setEntry] = useState<EntryDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchEntry = async () => {
-    setLoading(true);
-    setError(null);
-
-    const token = localStorage.getItem("token");
-    if (!token) {
+    if (!user) {
       const exampleEntry = findEntryById(entryId);
       if (exampleEntry) {
         setEntry(exampleEntry);
@@ -43,6 +44,7 @@ export function useEntryDetail(entryId: string) {
 
   useEffect(() => {
     fetchEntry();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entryId]);
 
   const deleteEntry = async (): Promise<boolean> => {

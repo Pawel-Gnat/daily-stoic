@@ -1,7 +1,6 @@
 import type { APIContext } from "astro";
 import { EntryService } from "../../lib/services/entry.service";
 import { createEntrySchema, entryListQuerySchema } from "../../lib/schemas/entry.schema";
-import { DEFAULT_USER_ID } from "../../db/supabase.client";
 import { DuplicateEntryError } from "../../lib/errors/entry-errors";
 
 export const prerender = false;
@@ -21,16 +20,19 @@ export async function POST({ request, locals }: APIContext) {
         }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json" },
         }
       );
     }
 
     const { what_matters_most, fears_of_loss, personal_goals } = result.data;
 
-    // In a production environment, we would get the user ID from the JWT token
-    // For now, we use the default user ID as per instructions
-    const userId = DEFAULT_USER_ID;
+    const userId = locals.user?.id;
+
+    if (!userId) {
+      return new Response(JSON.stringify({ error: { code: "unauthorized", message: "Unauthorized" } }), {
+        status: 401,
+      });
+    }
 
     const entryService = new EntryService(locals.supabase);
     const entry = await entryService.createEntry(userId, {
@@ -41,13 +43,11 @@ export async function POST({ request, locals }: APIContext) {
 
     return new Response(JSON.stringify(entry), {
       status: 201,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     if (error instanceof DuplicateEntryError) {
       return new Response(JSON.stringify({ error: { code: "duplicate_entry", message: error.message } }), {
         status: 409,
-        headers: { "Content-Type": "application/json" },
       });
     }
     console.error("Error creating entry:", error);
@@ -66,7 +66,6 @@ export async function POST({ request, locals }: APIContext) {
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
       }
     );
   }
@@ -90,7 +89,6 @@ export async function GET({ url, locals }: APIContext) {
         }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json" },
         }
       );
     }
@@ -100,7 +98,6 @@ export async function GET({ url, locals }: APIContext) {
     if (!userId) {
       return new Response(JSON.stringify({ error: { code: "unauthorized", message: "Unauthorized" } }), {
         status: 401,
-        headers: { "Content-Type": "application/json" },
       });
     }
 
@@ -109,7 +106,6 @@ export async function GET({ url, locals }: APIContext) {
 
     return new Response(JSON.stringify(response), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     console.error("Error fetching entries:", error);
@@ -123,7 +119,6 @@ export async function GET({ url, locals }: APIContext) {
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
       }
     );
   }

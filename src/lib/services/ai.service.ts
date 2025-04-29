@@ -21,7 +21,7 @@ export class AIService {
 
     try {
       const systemMessage = this.openRouter.createSystemMessage(
-        "You are a Stoic philosopher assistant. Provide wisdom that includes advice and warnings based on the user's reflections. Focus on practical guidance that can help the user deal with his concerns. The response should be in the language of the user's message."
+        "You are a Stoic philosopher assistant. Provide concise, plain-text wisdom that includes advice and warnings based on the user's reflections. Focus on practical guidance that can help the user deal with his concerns. Do not use any special formatting such as bold, headings, or lists. The response should be plain text, easy to read and follow. The response should be in the language of the user's message."
       );
 
       const userMessage = this.openRouter.createUserMessage(
@@ -30,7 +30,7 @@ export class AIService {
         - Fears of loss: ${context.fears_of_loss}
         - Personal goals: ${context.personal_goals}
         
-         Provide stoic wisdom, advice, and warnings that address these reflections, helping the user gain perspective on what matters and how to deal with fears and goals effectively.`
+        Provide short stoic wisdom, practical advice, and warnings related to the reflections in a simple, plain-text format.`
       );
 
       const response = await this.openRouter.createChatCompletion({

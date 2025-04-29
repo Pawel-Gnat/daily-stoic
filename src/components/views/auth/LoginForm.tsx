@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shared/Button";
 import { useNavigate } from "@/hooks/useNavigate";
 import { loginSchema, type LoginFormData } from "@/lib/schemas/auth.schema";
 import { Form } from "@/components/ui/form";
@@ -22,16 +22,15 @@ export function LoginForm() {
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: data.email, password: data.password }),
       });
       const payload = await res.json();
 
       if (!res.ok) throw new Error(payload.error);
       navigate("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      toast.error(error.message || "An error occurred during login.");
+      toast.error(error instanceof Error ? error.message : "An error occurred during login.");
     }
   };
 
@@ -41,7 +40,7 @@ export function LoginForm() {
         <TextField control={form.control} name="email" label="Email" placeholder="Enter your email" />
         <TextField control={form.control} name="password" label="Password" placeholder="Enter your password" />
 
-        <Button type="submit" className="w-full bg-golden" disabled={form.formState.isSubmitting}>
+        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? "Logging in..." : "Log in"}
         </Button>
 

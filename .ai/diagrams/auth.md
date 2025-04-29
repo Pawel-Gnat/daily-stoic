@@ -108,3 +108,5 @@ deactivate AstroAPI
 ```
 
 </mermaid_diagram>
+
+https://www.mermaidchart.com/raw/a77665c8-4d15-429f-ae6d-ea4d0bfcd7d6?theme=light&version=v0.1&format=svg

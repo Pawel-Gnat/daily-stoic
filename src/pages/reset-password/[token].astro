@@ -16,8 +16,8 @@ if (!token) {
   <Main className="flex items-center flex-1 w-full">
     <Container className="text-center">
       <p class="font-cinzel text-xl">Set your new password.</p>
-      <AuthCard client:load>
-        <ResetPasswordForm client:load token={token} />
+      <AuthCard>
+        <ResetPasswordForm />
       </AuthCard>
     </Container>
   </Main>

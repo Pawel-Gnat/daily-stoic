@@ -1,25 +1,6 @@
 import { defineMiddleware } from "astro:middleware";
 import { createSupabaseServerInstance } from "@/db/supabase.client";
 
-const PUBLIC_PATHS = [
-  // Server-Rendered Astro Pages
-  "/",
-  "/entries",
-  "/entries/:id",
-  "/entries/sample-entry-1",
-  "/entries/sample-entry-2",
-  "/entries/sample-entry-3",
-  "/entries/sample-entry-4",
-  "/login",
-  "/register",
-  // Auth API endpoints
-  "/forgot-password",
-  "/reset-password",
-  "/api/auth/login",
-  "/api/auth/register",
-  "/api/auth/logout",
-];
-
 const RESTRICTED_FOR_UNAUTHENTICATED_USER_PATHS = [
   // Server-Rendered Astro Pages
   "/entries/:id",
@@ -32,18 +13,16 @@ const RESTRICTED_FOR_UNAUTHENTICATED_USER_PATHS = [
 ];
 
 const RESTRICTED_FOR_AUTHENTICATED_USER_PATHS = [
-  // Auth API endpoints
+  // Server-Rendered Astro Pages
+  "/login",
+  "/register",
   "/forgot-password",
+  // Auth API endpoints
   "/api/auth/login",
   "/api/auth/register",
 ];
 
 export const onRequest = defineMiddleware(async ({ request, url, cookies, locals, redirect }, next) => {
-  // if (PUBLIC_PATHS.includes(url.pathname)) {
-  //   console.log("@PUBLIC_PATHS", url.pathname);
-  //   return next();
-  // }
-
   const supabase = createSupabaseServerInstance({
     cookies,
     headers: request.headers,

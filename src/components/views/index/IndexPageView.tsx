@@ -23,8 +23,10 @@ export default function IndexPageView({ user }: Props) {
   return (
     <Container className="text-center">
       <p className="font-cinzel text-xl">
-        Discover ancient wisdom through personal reflection. Answer three questions to receive a personalized Stoic
-        perspective on your life&apos;s journey.
+        {entry
+          ? `Reflect on your today's entry.`
+          : `Discover ancient wisdom through personal reflection. Answer three questions to receive a personalized Stoic
+        perspective on your life's journey.`}
       </p>
       {!user && (
         <NavLink href="/entries" className="mx-auto">

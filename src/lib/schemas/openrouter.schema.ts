@@ -7,7 +7,7 @@ export const OpenRouterConfigSchema = z.object({
 
 export const ChatMessageSchema = z.object({
   role: z.enum(["system", "user", "assistant"]),
-  content: z.string().max(500),
+  content: z.string().max(2000),
 });
 
 export const ResponseFormatSchema = z.object({
