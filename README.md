@@ -92,6 +92,11 @@ In the project directory, you can run:
 - **`npm run lint`**: Runs ESLint to analyze code for errors
 - **`npm run lint:fix`**: Automatically fixes linting issues where possible
 - **`npm run format`**: Formats the code using Prettier
+- **`npm run test:unit`**: Runs unit tests using Vitest
+- **`npm run test:unit:watch`**: Runs unit tests in watch mode
+- **`npm run test:e2e`**: Runs end-to-end tests using Playwright
+- **`npm run test:e2e:headed`**: Runs end-to-end tests in headed mode (shows browser)
+- **`npm run test:e2e:report`**: Opens the Playwright HTML report
 
 ## Project Scope
 
