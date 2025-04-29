@@ -95,9 +95,14 @@ export async function GET({ url, locals }: APIContext) {
       );
     }
 
-    // In a production environment, we would get the user ID from the JWT token
-    // For now, we use the default user ID as per instructions
-    const userId = DEFAULT_USER_ID;
+    const userId = locals.user?.id;
+
+    if (!userId) {
+      return new Response(JSON.stringify({ error: { code: "unauthorized", message: "Unauthorized" } }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
     const entryService = new EntryService(locals.supabase);
     const response = await entryService.getEntries(userId, result.data);

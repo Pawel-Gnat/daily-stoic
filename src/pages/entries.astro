@@ -2,10 +2,12 @@
 import Layout from "../layouts/Layout.astro";
 import EntriesViewPage from "../components/views/entries/EntriesViewPage";
 import Main from "@/components/Main";
+
+const { user } = Astro.locals;
 ---
 
 <Layout title="Entries - Daily Stoic">
   <Main>
-    <EntriesViewPage client:load />
+    <EntriesViewPage user={user} client:load />
   </Main>
 </Layout>

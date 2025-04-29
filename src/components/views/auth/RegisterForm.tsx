@@ -22,7 +22,7 @@ export function RegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const res = await fetch("/api/auth/sign-up", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -33,7 +33,7 @@ export function RegisterForm() {
       });
       const payload = await res.json();
       if (!res.ok) throw new Error(payload.error);
-      toast.success("Registration successful! Please check your email to confirm your account.");
+
       navigate("/login?registered=true");
     } catch (error: any) {
       console.error(error);

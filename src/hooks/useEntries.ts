@@ -1,9 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
-import type { EntryDto, EntryListResponseDto, PaginationMetadata } from "../types";
+import type { EntryDto, EntryListResponseDto, PaginationMetadata, UserDto } from "../types";
 import { toast } from "sonner";
 import { sampleEntries } from "@/lib/entries-helpers";
 
-const useEntries = () => {
+interface Props {
+  user: UserDto | undefined;
+}
+
+const useEntries = ({ user }: Props) => {
   const [entries, setEntries] = useState<EntryDto[]>([]);
   const [pagination, setPagination] = useState<PaginationMetadata>({
     current_page: 1,
@@ -17,25 +21,21 @@ const useEntries = () => {
   // const page = params.get("page") || 1;
 
   const fetchEntries = useCallback(async (page: number = 1) => {
-    setLoading(true);
-    setError(null);
-
-    const token = localStorage.getItem("token");
-    if (!token) {
+    if (!user) {
       setEntries(sampleEntries.data);
       setPagination(sampleEntries.pagination);
-      setLoading(false);
       return;
     }
 
+    setLoading(true);
+    setError(null);
+
     try {
-      // const res = await fetch(`/api/entries?page=${page}&limit=10`, {
-      //   headers: { Authorization: `Bearer ${token}` },
-      // });
       const res = await fetch(`/api/entries?page=${page}&limit=10`);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
+
       const data: EntryListResponseDto = await res.json();
       setEntries(data.data);
       setPagination(data.pagination);

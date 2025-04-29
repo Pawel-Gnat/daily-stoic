@@ -20,14 +20,14 @@ export function LoginForm() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const res = await fetch("/api/auth/sign-in", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: data.email, password: data.password }),
       });
       const payload = await res.json();
+
       if (!res.ok) throw new Error(payload.error);
-      toast.success("Successfully logged in!");
       navigate("/");
     } catch (error: any) {
       console.error(error);

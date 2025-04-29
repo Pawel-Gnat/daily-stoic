@@ -21,7 +21,7 @@ export class AIService {
 
     try {
       const systemMessage = this.openRouter.createSystemMessage(
-        "You are a Stoic philosopher assistant. Generate a wise, stoic sentence that addresses the user's reflections. Please respond in language of the user's message."
+        "You are a Stoic philosopher assistant. Provide wisdom that includes advice and warnings based on the user's reflections. Focus on practical guidance that can help the user deal with his concerns. The response should be in the language of the user's message."
       );
 
       const userMessage = this.openRouter.createUserMessage(
@@ -30,7 +30,7 @@ export class AIService {
         - Fears of loss: ${context.fears_of_loss}
         - Personal goals: ${context.personal_goals}
         
-        Generate a stoic wisdom that addresses these reflections.`
+         Provide stoic wisdom, advice, and warnings that address these reflections, helping the user gain perspective on what matters and how to deal with fears and goals effectively.`
       );
 
       const response = await this.openRouter.createChatCompletion({

@@ -6,12 +6,6 @@ import { AuthCard } from "@/components/views/auth/AuthCard";
 import { LoginForm } from "@/components/views/auth/LoginForm";
 import { Container } from "@/components/shared/Container";
 import Main from "@/components/Main";
-
-const { user } = Astro.locals;
-
-if (!user) {
-  return Astro.redirect("/");
-}
 ---
 
 <Layout title="Login - Daily Stoic">

@@ -1,6 +1,6 @@
 import type { Tables } from "./db/database.types";
 
-export type User = Tables<"users">;
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 export type Entry = Tables<"entries">;
 
 export interface RegisterUserDto {
@@ -14,7 +14,7 @@ export interface LoginUserDto {
   password: string;
 }
 
-export type UserDto = Pick<User, "id" | "email" | "name" | "created_at">;
+export type UserDto = Pick<SupabaseUser, "id" | "email">;
 
 export interface AuthResponseDto {
   token: string;

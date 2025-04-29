@@ -2,10 +2,12 @@
 import Layout from "../layouts/Layout.astro";
 import IndexPageView from "../components/views/index/IndexPageView";
 import Main from "@/components/Main";
+
+const { user } = Astro.locals;
 ---
 
 <Layout title="Daily Stoic Reflection">
   <Main>
-    <IndexPageView client:load />
+    <IndexPageView user={user} client:load />
   </Main>
 </Layout>

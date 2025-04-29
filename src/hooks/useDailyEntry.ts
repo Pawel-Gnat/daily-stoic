@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import type { CreateEntryDto, EntryDto } from "@/types";
+import type { CreateEntryDto, EntryDto, UserDto } from "@/types";
 
-export function useDailyEntry() {
+interface Props {
+  user: UserDto | undefined;
+}
+
+export function useDailyEntry({ user }: Props) {
   const [entry, setEntry] = useState<EntryDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchTodayEntry = async () => {
+    if (!user) return;
     setIsLoading(true);
 
     try {
@@ -31,6 +36,9 @@ export function useDailyEntry() {
   };
 
   const createEntry = async (data: CreateEntryDto) => {
+    if (!user) return;
+    setIsLoading(true);
+
     try {
       const token = localStorage.getItem("token");
 
@@ -58,6 +66,7 @@ export function useDailyEntry() {
       toast.error(errorMessage);
       throw error;
     } finally {
+      setIsLoading(false);
     }
   };
 

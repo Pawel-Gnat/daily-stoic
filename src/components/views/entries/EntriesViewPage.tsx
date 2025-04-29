@@ -3,9 +3,15 @@ import useEntries from "../../../hooks/useEntries";
 import { Pagination } from "./Pagination";
 import { Spinner } from "@/components/shared/Spinner";
 import { Container } from "@/components/shared/Container";
+import type { UserDto } from "@/types";
+import { NoEntriesCard } from "./NoEntriesCard";
 
-const EntriesViewPage = () => {
-  const { entries, pagination, loading, error, fetchEntries } = useEntries();
+interface Props {
+  user: UserDto | undefined;
+}
+
+const EntriesViewPage = ({ user }: Props) => {
+  const { entries, pagination, loading, error, fetchEntries } = useEntries({ user });
 
   if (loading) return <Spinner />;
 
@@ -16,6 +22,7 @@ const EntriesViewPage = () => {
       </p>
       <div className="flex flex-wrap gap-4 justify-center">
         {error && <div>Error: {error}</div>}
+        {entries.length === 0 && <NoEntriesCard />}
         {entries.map((entry) => (
           <EntryCard key={entry.id} entry={entry} />
         ))}

@@ -90,9 +90,9 @@ Katalog: `src/pages/api/auth`
 
 ### 2.1 Endpointy
 
-- `sign-up.ts` [POST] – przyjmuje `{ email, password }`, wywołuje `supabase.auth.signUp`
-- `sign-in.ts` [POST] – przyjmuje `{ email, password }`, wywołuje `supabase.auth.signInWithPassword`
-- `sign-out.ts` [POST] – wywołuje `supabase.auth.signOut`
+- `register.ts` [POST] – przyjmuje `{ email, password }`, wywołuje `supabase.auth.signUp`
+- `login.ts` [POST] – przyjmuje `{ email, password }`, wywołuje `supabase.auth.signInWithPassword`
+- `logout.ts` [POST] – wywołuje `supabase.auth.signOut`
 - `forgot-password.ts`[POST] – przyjmuje `{ email }`, wywołuje `supabase.auth.resetPasswordForEmail`
 - `reset-password.ts` [POST] – przyjmuje `{ token, newPassword }`, wywołuje `supabase.auth.updateUser`
 

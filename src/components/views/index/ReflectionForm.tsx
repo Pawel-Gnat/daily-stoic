@@ -1,20 +1,21 @@
 import { Card } from "@/components/ui/card";
-import { Loader2, Scroll } from "lucide-react";
+import { BookKey, Loader2, Scroll } from "lucide-react";
 import type { CreateEntryDto } from "@/types";
 import { useForm } from "react-hook-form";
 import { createEntrySchema } from "@/lib/schemas/entry.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { TextareaField } from "../../form/TextareaField";
 import { questions } from "@/lib/question-helpers";
+import { Button } from "@/components/shared/Button";
 
 interface ReflectionFormProps {
   onEntryCreated: (data: CreateEntryDto) => Promise<void>;
+  disabled?: boolean;
 }
 
-export function ReflectionForm({ onEntryCreated }: ReflectionFormProps) {
+export function ReflectionForm({ onEntryCreated, disabled = false }: ReflectionFormProps) {
   const form = useForm<z.infer<typeof createEntrySchema>>({
     resolver: zodResolver(createEntrySchema),
     defaultValues: {
@@ -36,6 +37,23 @@ export function ReflectionForm({ onEntryCreated }: ReflectionFormProps) {
     }
   }
 
+  const submitButtonText = disabled ? (
+    <>
+      <BookKey className="h-4 w-4" />
+      Sign in to add reflection
+    </>
+  ) : form.formState.isSubmitting ? (
+    <>
+      <Loader2 className="h-4 w-4 animate-spin" />
+      Adding reflection...
+    </>
+  ) : (
+    <>
+      <Scroll className="h-4 w-4" />
+      Add Reflection
+    </>
+  );
+
   return (
     <Card className="p-6 max-w-2xl text-left shadow-xl">
       <Form {...form}>
@@ -46,6 +64,7 @@ export function ReflectionForm({ onEntryCreated }: ReflectionFormProps) {
             label={questions[0].question}
             placeholder={questions[0].placeholder}
             description={`${watchTextareaMattersMost.length} / 500`}
+            disabled={disabled}
           />
 
           <TextareaField
@@ -54,6 +73,7 @@ export function ReflectionForm({ onEntryCreated }: ReflectionFormProps) {
             label={questions[1].question}
             placeholder={questions[1].placeholder}
             description={`${watchTextareaFearsOfLoss.length} / 500`}
+            disabled={disabled}
           />
 
           <TextareaField
@@ -62,20 +82,11 @@ export function ReflectionForm({ onEntryCreated }: ReflectionFormProps) {
             label={questions[2].question}
             placeholder={questions[2].placeholder}
             description={`${watchTextareaPersonalGoals.length} / 500`}
+            disabled={disabled}
           />
 
-          <Button type="submit" disabled={form.formState.isSubmitting} className="w-full bg-golden">
-            {form.formState.isSubmitting ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Adding reflection...
-              </>
-            ) : (
-              <>
-                <Scroll className="h-4 w-4" />
-                Add Reflection
-              </>
-            )}
+          <Button type="submit" disabled={form.formState.isSubmitting || disabled} className="w-full">
+            {submitButtonText}
           </Button>
         </form>
       </Form>

@@ -1,26 +1,40 @@
-import { Brain, Landmark, ScrollText, Sprout } from "lucide-react";
+import { Brain, DoorOpen, Landmark, ScrollText, Sprout } from "lucide-react";
 import { NavLink } from "./NavLink";
-import React, { useCallback } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useCallback } from "react";
 import { useNavigate } from "@/hooks/useNavigate";
 import type { UserDto } from "@/types";
+import { Button } from "../shared/Button";
+import { toast } from "sonner";
 
 interface Props {
   user: UserDto | undefined;
 }
 
 export const Navigation = ({ user }: Props) => {
-  const { user: authUser, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = useCallback(async () => {
+  const handleLogout = async () => {
+    console.log("test");
     try {
-      await logout();
+      const res = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error);
+      }
+
       navigate("/login");
-    } catch (error) {
+      // toast.success("Successfully logged out!");
+    } catch (error: any) {
       console.error(error);
+      toast.error(error.message || "Failed to log out.");
+      throw error;
     }
-  }, [logout, navigate]);
+  };
 
   return (
     <nav className="flex gap-4">
@@ -31,9 +45,9 @@ export const Navigation = ({ user }: Props) => {
         <ScrollText className="h-4 w-4" /> Entries
       </NavLink>
       {user ? (
-        <button onClick={handleLogout} className="text-primary hover:underline flex items-center gap-1">
-          <Sprout className="h-4 w-4" /> Logout
-        </button>
+        <Button onClick={handleLogout}>
+          <DoorOpen className="h-4 w-4" /> Logout
+        </Button>
       ) : (
         <>
           <NavLink href="/login">
