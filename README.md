@@ -44,8 +44,13 @@ Upon submission of the form (with each answer limited to 500 characters), the sy
   - Openrouter.ai (access to multiple AI models, e.g., OpenAI, Anthropic, Google, etc.)
 
 - **CI/CD and Hosting:**
+
   - GitHub Actions (for continuous integration)
   - DigitalOcean (Docker-based deployment)
+
+- **Testing:**
+  - Vitest + React Testing Library (testy jednostkowe)
+  - Playwright (testy end-to-end)
 
 ## Getting Started Locally
 
