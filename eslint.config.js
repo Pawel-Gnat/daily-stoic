@@ -66,7 +66,7 @@ const hooksConfig = tseslint.config({
 
 export default tseslint.config(
   includeIgnoreFile(gitignorePath),
-  { ignores: ["src/components/ui/**"] },
+  { ignores: ["src/components/ui/**", "src/db/database.types.ts"] },
   baseConfig,
   jsxA11yConfig,
   reactConfig,
