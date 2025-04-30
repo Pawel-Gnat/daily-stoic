@@ -65,6 +65,7 @@ export function ReflectionForm({ onEntryCreated, disabled = false }: ReflectionF
             placeholder={questions[0].placeholder}
             description={`${watchTextareaMattersMost.length} / 500`}
             disabled={disabled}
+            dataTestId="reflection-form-textarea-matters-most"
           />
 
           <TextareaField
@@ -74,6 +75,7 @@ export function ReflectionForm({ onEntryCreated, disabled = false }: ReflectionF
             placeholder={questions[1].placeholder}
             description={`${watchTextareaFearsOfLoss.length} / 500`}
             disabled={disabled}
+            dataTestId="reflection-form-textarea-fears-of-loss"
           />
 
           <TextareaField
@@ -83,9 +85,15 @@ export function ReflectionForm({ onEntryCreated, disabled = false }: ReflectionF
             placeholder={questions[2].placeholder}
             description={`${watchTextareaPersonalGoals.length} / 500`}
             disabled={disabled}
+            dataTestId="reflection-form-textarea-personal-goals"
           />
 
-          <Button type="submit" disabled={form.formState.isSubmitting || disabled} className="w-full">
+          <Button
+            type="submit"
+            disabled={form.formState.isSubmitting || disabled}
+            className="w-full"
+            dataTestId="reflection-form-submit-button"
+          >
             {submitButtonText}
           </Button>
         </form>

@@ -6,6 +6,7 @@ dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
 
 export default defineConfig({
   testDir: "tests/e2e",
+  globalTeardown: "./tests/global.teardown.ts",
   timeout: 30 * 1000,
   expect: {
     toHaveScreenshot: { threshold: 0.2 },

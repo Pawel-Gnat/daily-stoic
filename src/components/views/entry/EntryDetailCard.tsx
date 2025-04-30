@@ -19,7 +19,7 @@ export function EntryDetailCard({ entry }: EntryDetailCardProps) {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full" data-testid="entry-detail-card">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <BookOpenText className="w-4 h-4" /> {formatDate(entry.created_at)}

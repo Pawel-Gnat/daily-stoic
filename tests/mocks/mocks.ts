@@ -16,9 +16,9 @@ export const mockEntry: EntryDto = {
 };
 
 export const mockNewEntryData: CreateEntryDto = {
-  fears_of_loss: "New fear",
-  personal_goals: "New goal",
-  what_matters_most: "New matter",
+  fears_of_loss: "Fear of loss my friend",
+  personal_goals: "I want to be a good person",
+  what_matters_most: "My family",
 };
 
 export const mockCreatedEntry: EntryDto = {

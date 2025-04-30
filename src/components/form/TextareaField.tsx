@@ -13,6 +13,7 @@ interface TextareaFieldProps<
   description: string;
   placeholder: string;
   disabled?: boolean;
+  dataTestId?: string;
 }
 
 export const TextareaField = <TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>>({
@@ -22,6 +23,7 @@ export const TextareaField = <TFieldValues extends FieldValues, TName extends Fi
   description,
   placeholder,
   disabled = false,
+  dataTestId,
 }: TextareaFieldProps<TFieldValues, TName>) => {
   return (
     <FormField
@@ -31,7 +33,13 @@ export const TextareaField = <TFieldValues extends FieldValues, TName extends Fi
         <FormItem className="relative">
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Textarea placeholder={placeholder} {...field} className="bg-paper" disabled={disabled} />
+            <Textarea
+              placeholder={placeholder}
+              {...field}
+              className="bg-paper"
+              disabled={disabled}
+              data-testid={dataTestId}
+            />
           </FormControl>
           <FormDescription className="text-right absolute right-2 bottom-1">{description}</FormDescription>
           <FormMessage />
