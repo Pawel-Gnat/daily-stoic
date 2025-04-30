@@ -45,8 +45,15 @@ export function RegisterForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <TextField control={form.control} name="name" label="Name" placeholder="Enter your name" />
         <TextField control={form.control} name="email" label="Email" placeholder="Enter your email" />
-        <TextField control={form.control} name="password" label="Password" placeholder="Enter your password" />
         <TextField
+          type="password"
+          control={form.control}
+          name="password"
+          label="Password"
+          placeholder="Enter your password"
+        />
+        <TextField
+          type="password"
           control={form.control}
           name="confirmPassword"
           label="Confirm Password"

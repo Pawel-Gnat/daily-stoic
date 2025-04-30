@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, waitFor, act } from "@testing-library/react";
 import { toast } from "sonner";
 import { useDailyEntry } from "./useDailyEntry";
-import type { UserDto, EntryDto, CreateEntryDto } from "@/types";
+import { mockCreatedEntry, mockEntry, mockNewEntryData, mockUser } from "../../tests/mocks/mocks";
 
 // --- Mock Setup ---
 // Mock the global fetch function
@@ -17,36 +17,8 @@ vi.mock("sonner", () => ({
   },
 }));
 
-// --- Test Data ---
-const mockUser: UserDto = { id: "user-123", email: "test@example.com" };
-const mockEntry: EntryDto = {
-  id: "entry-456",
-  user_id: "user-123",
-  fears_of_loss: "Existing fear",
-  generated_sentence: "Generated sentence for existing",
-  personal_goals: "Existing goal",
-  what_matters_most: "Existing matter",
-  created_at: new Date().toISOString(),
-  generate_duration: 10,
-};
-const mockNewEntryData: CreateEntryDto = {
-  fears_of_loss: "New fear",
-  personal_goals: "New goal",
-  what_matters_most: "New matter",
-};
-const mockCreatedEntry: EntryDto = {
-  id: "entry-789",
-  user_id: "user-123",
-  fears_of_loss: mockNewEntryData.fears_of_loss,
-  generated_sentence: "Generated sentence for new",
-  personal_goals: mockNewEntryData.personal_goals,
-  what_matters_most: mockNewEntryData.what_matters_most,
-  created_at: new Date().toISOString(),
-  generate_duration: 15,
-};
-
 // Helper to create mock Response objects
-const createMockResponse = (body: any, ok: boolean, status: number): Response => {
+const createMockResponse = (body: unknown, ok: boolean, status: number): Response => {
   return {
     ok,
     status,
@@ -73,6 +45,7 @@ describe("useDailyEntry Hook", () => {
     });
 
     it("should initialize with isLoading=true and call fetch for today's entry", () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       fetchMock.mockReturnValue(new Promise(() => {}));
       const { result } = renderHook(() => useDailyEntry({ user: mockUser }));
 
@@ -105,6 +78,7 @@ describe("useDailyEntry Hook", () => {
     });
 
     it("should handle fetch error when getting today's entry", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
       const errorResponse = { error: { message: "Server blew up" } };
       fetchMock.mockResolvedValue(createMockResponse(errorResponse, false, 500));
@@ -120,6 +94,7 @@ describe("useDailyEntry Hook", () => {
     });
 
     it("should handle network error during fetch", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
       const networkError = new Error("Network connection lost");
       fetchMock.mockRejectedValue(networkError);
@@ -141,7 +116,7 @@ describe("useDailyEntry Hook", () => {
     beforeEach(async () => {
       fetchMock.mockResolvedValue(createMockResponse(null, true, 200));
       const { result } = renderHook(() => useDailyEntry({ user: mockUser }));
-      await waitFor(() => expect(result.current.isLoading).toBe(false)); 
+      await waitFor(() => expect(result.current.isLoading).toBe(false));
       hookResult = result;
       fetchMock.mockClear();
     });

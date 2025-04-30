@@ -57,7 +57,7 @@ export function ReflectionForm({ onEntryCreated, disabled = false }: ReflectionF
   return (
     <Card className="p-6 max-w-2xl text-left shadow-xl">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form data-testid="reflection-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <TextareaField
             control={form.control}
             name="what_matters_most"

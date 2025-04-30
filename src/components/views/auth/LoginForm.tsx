@@ -38,7 +38,13 @@ export function LoginForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <TextField control={form.control} name="email" label="Email" placeholder="Enter your email" />
-        <TextField control={form.control} name="password" label="Password" placeholder="Enter your password" />
+        <TextField
+          type="password"
+          control={form.control}
+          name="password"
+          label="Password"
+          placeholder="Enter your password"
+        />
 
         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? "Logging in..." : "Log in"}
