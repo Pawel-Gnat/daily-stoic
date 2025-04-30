@@ -3,9 +3,10 @@ import { Button as ButtonUI } from "../ui/button";
 
 interface ButtonProps extends React.ComponentProps<typeof ButtonUI> {
   children: React.ReactNode;
+  dataTestId?: string;
 }
 
-export function Button({ children, ...props }: ButtonProps) {
+export function Button({ children, dataTestId, ...props }: ButtonProps) {
   return (
     <ButtonUI
       {...props}
@@ -13,6 +14,7 @@ export function Button({ children, ...props }: ButtonProps) {
         "bg-golden border border-golden h-auto hover:bg-primary text-primary font-normal hover:text-secondary",
         props.className
       )}
+      data-testid={dataTestId}
     >
       {children}
     </ButtonUI>

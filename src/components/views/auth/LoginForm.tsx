@@ -37,16 +37,23 @@ export function LoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <TextField control={form.control} name="email" label="Email" placeholder="Enter your email" />
+        <TextField
+          control={form.control}
+          name="email"
+          label="Email"
+          placeholder="Enter your email"
+          dataTestId="email-input"
+        />
         <TextField
           type="password"
           control={form.control}
           name="password"
           label="Password"
           placeholder="Enter your password"
+          dataTestId="password-input"
         />
 
-        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+        <Button type="submit" className="w-full" disabled={form.formState.isSubmitting} dataTestId="login-button">
           {form.formState.isSubmitting ? "Logging in..." : "Log in"}
         </Button>
 
