@@ -36,22 +36,27 @@ export const Navigation = ({ user }: Props) => {
   return (
     <nav className="flex gap-4">
       <NavLink href="/">
-        <Icon name="home" /> Home
+        <Icon name="home" />
+        <span className="hidden sm:block">Home</span>
       </NavLink>
       <NavLink href="/entries">
-        <Icon name="entries" /> Entries
+        <Icon name="entries" />
+        <span className="hidden sm:block">Entries</span>
       </NavLink>
       {user ? (
         <Button onClick={handleLogout}>
-          <Icon name="logout" /> Logout
+          <Icon name="logout" />
+          <span className="hidden sm:block">Logout</span>
         </Button>
       ) : (
         <>
           <NavLink href="/login">
-            <Icon name="login" /> Login
+            <Icon name="login" />
+            <span className="hidden sm:block">Login</span>
           </NavLink>
           <NavLink href="/register">
-            <Icon name="register" /> Register
+            <Icon name="register" />
+            <span className="hidden sm:block">Register</span>
           </NavLink>
         </>
       )}
