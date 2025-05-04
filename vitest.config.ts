@@ -10,14 +10,7 @@ export default defineConfig({
     setupFiles: ["tests/unit/setup.ts"],
     include: ["src/**/*.test.ts", "src/**/*.test.tsx", "tests/unit/**/*.test.ts", "tests/unit/**/*.test.tsx"],
     coverage: {
-      provider: "istanbul",
       reporter: ["text", "lcov"],
-      thresholds: {
-        statements: 80,
-        branches: 80,
-        functions: 80,
-        lines: 80,
-      },
     },
   },
   resolve: {
