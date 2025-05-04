@@ -1,7 +1,7 @@
 import type { EntryDto } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpenText, Feather } from "lucide-react";
 import { questions } from "@/lib/question-helpers";
+import { Icon } from "@/lib/icons";
 
 interface EntryDetailCardProps {
   entry: EntryDto;
@@ -22,7 +22,7 @@ export function EntryDetailCard({ entry }: EntryDetailCardProps) {
     <Card className="w-full" data-testid="entry-detail-card">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <BookOpenText className="w-4 h-4" /> {formatDate(entry.created_at)}
+          <Icon name="full-book" /> {formatDate(entry.created_at)}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6 text-left">
@@ -43,7 +43,7 @@ export function EntryDetailCard({ entry }: EntryDetailCardProps) {
 
         <div className="space-y-2 pt-4">
           <h3 className="text-sm font-semibold flex items-center gap-2">
-            <Feather className="h-4 w-4" /> Stoic Wisdom
+            <Icon name="quote" /> Stoic Wisdom
           </h3>
           <blockquote className="font-cinzel p-3 bg-golden/30 rounded-md text-balance">
             {entry.generated_sentence}

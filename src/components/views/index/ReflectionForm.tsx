@@ -39,7 +39,7 @@ export function ReflectionForm({ onEntryCreated, disabled = false }: ReflectionF
 
   const submitButtonText = disabled ? (
     <>
-      <Icon name="blockedEntry" />
+      <Icon name="disabled" />
       Sign in to add reflection
     </>
   ) : form.formState.isSubmitting ? (
@@ -49,7 +49,7 @@ export function ReflectionForm({ onEntryCreated, disabled = false }: ReflectionF
     </>
   ) : (
     <>
-      <Icon name="emptyEntry" />
+      <Icon name="empty-entry" />
       Add Reflection
     </>
   );

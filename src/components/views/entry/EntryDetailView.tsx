@@ -6,9 +6,9 @@ import { useNavigate } from "../../../hooks/useNavigate.ts";
 import { Spinner } from "@/components/shared/Spinner.tsx";
 import { EntryDetailCard } from "./EntryDetailCard.tsx";
 import { Container } from "@/components/shared/Container.tsx";
-import { BookX } from "lucide-react";
 import type { UserDto } from "@/types";
 import { Button } from "@/components/ui/button";
+import { Icon } from "@/lib/icons/index.tsx";
 
 interface EntryDetailViewProps {
   entryId: string;
@@ -41,7 +41,7 @@ const EntryDetailView = ({ entryId, user }: EntryDetailViewProps) => {
           <DeleteConfirmationModal
             trigger={
               <Button variant="destructive">
-                <BookX className="w-4 h-4" /> Delete Entry
+                <Icon name="delete" /> Delete Entry
               </Button>
             }
             onConfirm={handleDelete}

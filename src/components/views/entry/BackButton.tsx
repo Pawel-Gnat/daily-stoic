@@ -1,10 +1,10 @@
 import { NavLink } from "@/components/navigation/NavLink";
-import { ArrowBigLeft } from "lucide-react";
+import { Icon } from "@/lib/icons";
 
 const BackButton = () => {
   return (
     <NavLink href="/entries" className="w-fit bg-paper">
-      <ArrowBigLeft className="w-4 h-4" /> Back
+      <Icon name="back" /> Back
     </NavLink>
   );
 };

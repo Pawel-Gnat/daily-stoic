@@ -1,4 +1,18 @@
-import { BookKey, Brain, DoorOpen, Landmark, Loader2, Scroll, ScrollText, Sprout } from "lucide-react";
+import {
+  ArrowBigLeft,
+  BookKey,
+  BookOpen,
+  BookOpenText,
+  BookX,
+  Brain,
+  DoorOpen,
+  Feather,
+  Landmark,
+  Loader2,
+  Scroll,
+  ScrollText,
+  Sprout,
+} from "lucide-react";
 
 export const icons = {
   home: Landmark,
@@ -7,9 +21,14 @@ export const icons = {
   register: Brain,
   logout: DoorOpen,
   loader: Loader2,
-  blockedEntry: BookKey,
-  emptyEntry: Scroll,
-  fullEntry: ScrollText,
+  disabled: BookKey,
+  delete: BookX,
+  back: ArrowBigLeft,
+  "empty-entry": Scroll,
+  "full-entry": ScrollText,
+  "empty-book": BookOpen,
+  "full-book": BookOpenText,
+  quote: Feather,
 };
 
 export type IconName = keyof typeof icons;
