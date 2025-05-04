@@ -23,6 +23,7 @@ async function globalTeardown() {
     if (error) {
       console.error("Error deleting entries:", error.message);
     } else {
+      // eslint-disable-next-line no-console
       console.log("Successfully deleted entries from the database.");
     }
   } catch (err) {
