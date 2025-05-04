@@ -4,8 +4,8 @@ import { useDailyEntry } from "../../../hooks/useDailyEntry";
 import type { CreateEntryDto, UserDto } from "@/types";
 import { Spinner } from "../../shared/Spinner";
 import { NavLink } from "@/components/navigation/NavLink";
-import { ScrollText } from "lucide-react";
 import { Container } from "@/components/shared/Container";
+import { Icon } from "@/lib/icons";
 
 interface Props {
   user: UserDto | undefined;
@@ -30,7 +30,7 @@ export default function IndexPageView({ user }: Props) {
       </p>
       {!user && (
         <NavLink href="/entries" className="mx-auto">
-          <ScrollText className="h-4 w-4" /> View Example Reflections
+          <Icon name="entries" /> View Example Reflections
         </NavLink>
       )}
       <div className="mt-6">

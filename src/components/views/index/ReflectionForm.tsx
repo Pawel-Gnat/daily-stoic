@@ -1,5 +1,4 @@
 import { Card } from "@/components/ui/card";
-import { BookKey, Loader2, Scroll } from "lucide-react";
 import type { CreateEntryDto } from "@/types";
 import { useForm } from "react-hook-form";
 import { createEntrySchema } from "@/lib/schemas/entry.schema";
@@ -9,6 +8,7 @@ import { Form } from "@/components/ui/form";
 import { TextareaField } from "../../form/TextareaField";
 import { questions } from "@/lib/question-helpers";
 import { Button } from "@/components/shared/Button";
+import { Icon } from "@/lib/icons";
 
 interface ReflectionFormProps {
   onEntryCreated: (data: CreateEntryDto) => Promise<void>;
@@ -39,17 +39,17 @@ export function ReflectionForm({ onEntryCreated, disabled = false }: ReflectionF
 
   const submitButtonText = disabled ? (
     <>
-      <BookKey className="h-4 w-4" />
+      <Icon name="blockedEntry" />
       Sign in to add reflection
     </>
   ) : form.formState.isSubmitting ? (
     <>
-      <Loader2 className="h-4 w-4 animate-spin" />
+      <Icon name="loader" className="animate-spin" />
       Adding reflection...
     </>
   ) : (
     <>
-      <Scroll className="h-4 w-4" />
+      <Icon name="emptyEntry" />
       Add Reflection
     </>
   );

@@ -1,9 +1,9 @@
-import { Brain, DoorOpen, Landmark, ScrollText, Sprout } from "lucide-react";
 import { NavLink } from "./NavLink";
 import { useNavigate } from "@/hooks/useNavigate";
 import type { UserDto } from "@/types";
 import { Button } from "../shared/Button";
 import { toast } from "sonner";
+import { Icon } from "@/lib/icons";
 
 interface Props {
   user: UserDto | undefined;
@@ -36,22 +36,22 @@ export const Navigation = ({ user }: Props) => {
   return (
     <nav className="flex gap-4">
       <NavLink href="/">
-        <Landmark className="h-4 w-4" /> Home
+        <Icon name="home" /> Home
       </NavLink>
       <NavLink href="/entries">
-        <ScrollText className="h-4 w-4" /> Entries
+        <Icon name="entries" /> Entries
       </NavLink>
       {user ? (
         <Button onClick={handleLogout}>
-          <DoorOpen className="h-4 w-4" /> Logout
+          <Icon name="logout" /> Logout
         </Button>
       ) : (
         <>
           <NavLink href="/login">
-            <Sprout className="h-4 w-4" /> Login
+            <Icon name="login" /> Login
           </NavLink>
           <NavLink href="/register">
-            <Brain className="h-4 w-4" /> Register
+            <Icon name="register" /> Register
           </NavLink>
         </>
       )}
