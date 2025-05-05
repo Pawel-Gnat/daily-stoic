@@ -64,6 +64,7 @@ jobs:
     name: Deploy Preview
     needs: [lint, unit-tests]
     runs-on: ubuntu-latest
+    environment: integration
     outputs:
       preview_url: ${{ steps.deployment.outputs.preview_url }}
     steps:
