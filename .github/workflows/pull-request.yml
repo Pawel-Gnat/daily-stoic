@@ -4,6 +4,11 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  pull-requests: write
+  deployments: write
+
 jobs:
   lint:
     name: Lint Code
@@ -55,9 +60,49 @@ jobs:
           path: coverage/
           retention-days: 7
 
+  deploy-preview:
+    name: Deploy Preview
+    needs: [lint, unit-tests]
+    runs-on: ubuntu-latest
+    environment: integration
+    outputs:
+      preview_url: ${{ steps.deployment.outputs.preview_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+
+      - name: Deploy to Cloudflare Pages
+        id: deployment
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name='daily-stoic' --branch=${{ github.head_ref }}
+
+      - name: Set Preview URL
+        run: echo "preview_url=${{ steps.deployment.outputs.preview_url }}" >> $GITHUB_ENV
+
   e2e-tests:
     name: E2E Tests
-    needs: lint
+    needs: deploy-preview
     runs-on: ubuntu-latest
     environment: integration
     steps:
@@ -78,9 +123,20 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Wait for Preview Deployment
+        run: |
+          if [ -z "${{ needs.deploy-preview.outputs.preview_url }}" ]; then
+            echo "Preview URL is empty. Skipping deployment wait."
+          else
+            echo "Waiting for preview deployment at ${{ needs.deploy-preview.outputs.preview_url }} ..."
+            curl --retry 15 --retry-delay 10 --retry-connrefused --fail --silent --output /dev/null ${{ needs.deploy-preview.outputs.preview_url }}
+            echo "Preview deployment is ready!"
+          fi
+
       - name: Run E2E tests
         run: npm run test:e2e
         env:
+          BASE_URL: ${{ needs.deploy-preview.outputs.preview_url }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -98,13 +154,17 @@ jobs:
   status-comment:
     name: Status Comment
     if: always()
-    needs: [lint, unit-tests, e2e-tests]
+    needs: [lint, unit-tests, deploy-preview, e2e-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Check status of previous jobs
         id: check
         run: |
-          if [[ "${{ needs.lint.result }}" == "success" && "${{ needs.unit-tests.result }}" == "success" && "${{ needs.e2e-tests.result }}" == "success" ]]; then
+          # Check status of all preceding jobs
+          if [[ "${{ needs.lint.result }}" == "success" && \
+                "${{ needs.unit-tests.result }}" == "success" && \
+                "${{ needs.deploy-preview.result }}" == "success" && \
+                "${{ needs.e2e-tests.result }}" == "success" ]]; then
             echo "status=success" >> $GITHUB_OUTPUT
           else
             echo "status=failure" >> $GITHUB_OUTPUT
@@ -120,7 +180,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '✅ All checks have passed successfully!\n\n- ✓ Lint: Passed\n- ✓ Unit Tests: Passed\n- ✓ E2E Tests: Passed'
+              body: `✅ All checks passed & preview deployed!\n\n- ✓ Lint: Passed\n- ✓ Unit Tests: Passed\n- ✓ Deploy Preview: Passed\n- ✓ E2E Tests: Passed\n\nPreview URL: ${{ needs.deploy-preview.outputs.preview_url }}`
             })
 
       - name: Add failure comment
@@ -131,11 +191,14 @@ jobs:
           script: |
             const lintStatus = "${{ needs.lint.result }}" === "success" ? "✓ Passed" : "❌ Failed";
             const unitStatus = "${{ needs.unit-tests.result }}" === "success" ? "✓ Passed" : "❌ Failed";
+            const deployStatus = "${{ needs.deploy-preview.result }}" === "success" ? "✓ Passed" : "❌ Failed";
             const e2eStatus = "${{ needs.e2e-tests.result }}" === "success" ? "✓ Passed" : "❌ Failed";
+            const previewUrlLine = "${{ needs.deploy-preview.result }}" === "success" ? `\nPreview URL: ${{ needs.deploy-preview.outputs.preview_url }}` : "";
+
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `❌ Some checks have failed. Please review the workflow logs for more details.\n\n- ${lintStatus}: Lint\n- ${unitStatus}: Unit Tests\n- ${e2eStatus}: E2E Tests`
+              body: `❌ Some checks failed. Review logs for details.\n\n- ${lintStatus}: Lint\n- ${unitStatus}: Unit Tests\n- ${deployStatus}: Deploy Preview\n- ${e2eStatus}: E2E Tests${previewUrlLine}`
             })

@@ -19,7 +19,7 @@ export default defineConfig({
     headless: true,
     viewport: { width: 1280, height: 720 },
     actionTimeout: 5 * 1000,
-    baseURL: "http://localhost:3000",
+    baseURL: process.env.BASE_URL || "http://localhost:3000",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -31,10 +31,4 @@ export default defineConfig({
     },
   ],
   outputDir: "test-results/",
-  webServer: {
-    command: "npm run dev:e2e",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-  },
 });
