@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: integration
     outputs:
-      preview_url: ${{ steps.deployment.outputs.preview_url }}
+      url: ${{ steps.deployment.outputs.url }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -121,17 +121,15 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Wait for Preview Deployment
-        # Use curl to poll the preview URL until it's available (returns 200 OK)
-        # Retries 15 times with a 10-second delay (total wait time up to 150 seconds)
         run: |
-          echo "Waiting for preview deployment at ${{ needs.deploy-preview.outputs.preview_url }} ..."
-          curl --retry 15 --retry-delay 10 --retry-connrefused --fail --silent --output /dev/null ${{ needs.deploy-preview.outputs.preview_url }}
+          echo "Waiting for preview deployment at ${{ needs.deploy-preview.outputs.url }} ..."
+          curl --retry 15 --retry-delay 10 --retry-connrefused --fail --silent --output /dev/null ${{ needs.deploy-preview.outputs.url }}
           echo "Preview deployment is ready!"
 
       - name: Run E2E tests
         run: npm run test:e2e
         env:
-          BASE_URL: ${{ needs.deploy-preview.outputs.preview_url }}
+          BASE_URL: ${{ needs.deploy-preview.outputs.url }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -175,8 +173,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              # Update success comment to include deploy step
-              body: '✅ All checks passed & preview deployed!\n\n- ✓ Lint: Passed\n- ✓ Unit Tests: Passed\n- ✓ Deploy Preview: Passed\n- ✓ E2E Tests: Passed\n\nPreview URL: ${{ needs.deploy-preview.outputs.preview_url }}'
+              body: `✅ All checks passed & preview deployed!\n\n- ✓ Lint: Passed\n- ✓ Unit Tests: Passed\n- ✓ Deploy Preview: Passed\n- ✓ E2E Tests: Passed\n\nPreview URL: ${{ needs.deploy-preview.outputs.url }}`
             })
 
       - name: Add failure comment
@@ -187,16 +184,14 @@ jobs:
           script: |
             const lintStatus = "${{ needs.lint.result }}" === "success" ? "✓ Passed" : "❌ Failed";
             const unitStatus = "${{ needs.unit-tests.result }}" === "success" ? "✓ Passed" : "❌ Failed";
-            # Add status for deploy-preview job
             const deployStatus = "${{ needs.deploy-preview.result }}" === "success" ? "✓ Passed" : "❌ Failed";
             const e2eStatus = "${{ needs.e2e-tests.result }}" === "success" ? "✓ Passed" : "❌ Failed";
-            const previewUrlLine = "${{ needs.deploy-preview.result }}" === "success" ? `\nPreview URL: ${{ needs.deploy-preview.outputs.preview_url }}` : "";
+            const previewUrlLine = "${{ needs.deploy-preview.result }}" === "success" ? `\nPreview URL: ${{ needs.deploy-preview.outputs.url }}` : "";
 
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              # Update failure comment to include deploy step status and URL if successful
               body: `❌ Some checks failed. Review logs for details.\n\n- ${lintStatus}: Lint\n- ${unitStatus}: Unit Tests\n- ${deployStatus}: Deploy Preview\n- ${e2eStatus}: E2E Tests${previewUrlLine}`
             })
