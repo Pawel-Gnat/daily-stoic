@@ -16,16 +16,16 @@ export default defineConfig({
     plugins: [tailwindcss()],
     resolve: {
       alias:
-        import.meta.env.PUBLIC_ENV !== "local"
-          ? {
+        process.env.PUBLIC_ENV === "local"
+          ? undefined
+          : {
               "react-dom/server": "react-dom/server.edge",
-            }
-          : undefined,
+            },
     },
   },
   integrations: [react()],
   adapter:
-    import.meta.env.PUBLIC_ENV === "local"
+    process.env.PUBLIC_ENV === "local"
       ? node({
           mode: "middleware",
         })
