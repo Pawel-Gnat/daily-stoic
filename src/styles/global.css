@@ -152,4 +152,8 @@
   [data-slot="card"] {
     @apply shadow-xl;
   }
+
+  button {
+    @apply cursor-pointer;
+  }
 }
