@@ -17,7 +17,7 @@ export default defineConfig({
   },
   integrations: [react()],
   adapter:
-    process.env.PUBLIC_ENV === "local"
+    import.meta.env.PUBLIC_ENV === "local"
       ? node({
           mode: "middleware",
         })
