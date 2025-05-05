@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: integration
     outputs:
-      url: ${{ steps.deployment.outputs.url }}
+      preview_url: ${{ steps.deployment.outputs.preview_url }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -122,14 +122,14 @@ jobs:
 
       - name: Wait for Preview Deployment
         run: |
-          echo "Waiting for preview deployment at ${{ needs.deploy-preview.outputs.url }} ..."
-          curl --retry 15 --retry-delay 10 --retry-connrefused --fail --silent --output /dev/null ${{ needs.deploy-preview.outputs.url }}
+          echo "Waiting for preview deployment at ${{ needs.deploy-preview.outputs.preview_url }} ..."
+          curl --retry 15 --retry-delay 10 --retry-connrefused --fail --silent --output /dev/null ${{ needs.deploy-preview.outputs.preview_url }}
           echo "Preview deployment is ready!"
 
       - name: Run E2E tests
         run: npm run test:e2e
         env:
-          BASE_URL: ${{ needs.deploy-preview.outputs.url }}
+          BASE_URL: ${{ needs.deploy-preview.outputs.preview_url }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -173,7 +173,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `✅ All checks passed & preview deployed!\n\n- ✓ Lint: Passed\n- ✓ Unit Tests: Passed\n- ✓ Deploy Preview: Passed\n- ✓ E2E Tests: Passed\n\nPreview URL: ${{ needs.deploy-preview.outputs.url }}`
+              body: `✅ All checks passed & preview deployed!\n\n- ✓ Lint: Passed\n- ✓ Unit Tests: Passed\n- ✓ Deploy Preview: Passed\n- ✓ E2E Tests: Passed\n\nPreview URL: ${{ needs.deploy-preview.outputs.preview_url }}`
             })
 
       - name: Add failure comment
@@ -186,7 +186,7 @@ jobs:
             const unitStatus = "${{ needs.unit-tests.result }}" === "success" ? "✓ Passed" : "❌ Failed";
             const deployStatus = "${{ needs.deploy-preview.result }}" === "success" ? "✓ Passed" : "❌ Failed";
             const e2eStatus = "${{ needs.e2e-tests.result }}" === "success" ? "✓ Passed" : "❌ Failed";
-            const previewUrlLine = "${{ needs.deploy-preview.result }}" === "success" ? `\nPreview URL: ${{ needs.deploy-preview.outputs.url }}` : "";
+            const previewUrlLine = "${{ needs.deploy-preview.result }}" === "success" ? `\nPreview URL: ${{ needs.deploy-preview.outputs.preview_url }}` : "";
 
 
             github.rest.issues.createComment({
