@@ -1,9 +1,9 @@
-import type { APIContext } from "astro";
+import type { APIRoute } from "astro";
 import { EntryService } from "../../../lib/services/entry.service";
 
 export const prerender = false;
 
-export async function GET({ locals }: APIContext) {
+export const GET: APIRoute = async ({ locals }) => {
   try {
     const userId = locals.user?.id;
 
@@ -26,4 +26,4 @@ export async function GET({ locals }: APIContext) {
       { status: 500 }
     );
   }
-}
+};

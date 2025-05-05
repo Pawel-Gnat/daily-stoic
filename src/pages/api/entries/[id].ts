@@ -1,4 +1,4 @@
-import type { APIContext } from "astro";
+import type { APIRoute } from "astro";
 import { EntryService } from "../../../lib/services/entry.service";
 import { uuidSchema } from "../../../lib/schemas/entry.schema";
 
@@ -7,7 +7,7 @@ export const prerender = false;
 /**
  * GET /entries/:id - Retrieve a specific entry
  */
-export async function GET({ params, locals }: APIContext) {
+export const GET: APIRoute = async ({ params, locals }) => {
   try {
     const result = uuidSchema.safeParse(params.id);
     if (!result.success) {
@@ -67,12 +67,12 @@ export async function GET({ params, locals }: APIContext) {
       }
     );
   }
-}
+};
 
 /**
  * DELETE /entries/:id - Delete a specific entry
  */
-export async function DELETE({ params, locals }: APIContext) {
+export const DELETE: APIRoute = async ({ params, locals }) => {
   try {
     const result = uuidSchema.safeParse(params.id);
     if (!result.success) {
@@ -132,4 +132,4 @@ export async function DELETE({ params, locals }: APIContext) {
       }
     );
   }
-}
+};

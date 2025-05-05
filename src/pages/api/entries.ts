@@ -1,11 +1,11 @@
-import type { APIContext } from "astro";
+import type { APIRoute } from "astro";
 import { EntryService } from "../../lib/services/entry.service";
 import { createEntrySchema, entryListQuerySchema } from "../../lib/schemas/entry.schema";
 import { DuplicateEntryError } from "../../lib/errors/entry-errors";
 
 export const prerender = false;
 
-export async function POST({ request, locals }: APIContext) {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const json = await request.json();
     const result = createEntrySchema.safeParse(json);
@@ -69,12 +69,12 @@ export async function POST({ request, locals }: APIContext) {
       }
     );
   }
-}
+};
 
 /**
  * GET /entries - Retrieve paginated list of user's entries
  */
-export async function GET({ url, locals }: APIContext) {
+export const GET: APIRoute = async ({ url, locals }) => {
   try {
     const params = Object.fromEntries(url.searchParams.entries());
     const result = entryListQuerySchema.safeParse(params);
@@ -122,4 +122,4 @@ export async function GET({ url, locals }: APIContext) {
       }
     );
   }
-}
+};
