@@ -15,12 +15,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     resolve: {
-      alias:
-        import.meta.env.PUBLIC_ENV !== "local"
-          ? {
-              "react-dom/server": "react-dom/server.edge",
-            }
-          : undefined,
+      alias: import.meta.env.PROD ? { "react-dom/server": "react-dom/server.edge" } : undefined,
     },
   },
   integrations: [react()],
