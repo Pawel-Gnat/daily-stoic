@@ -1,0 +1,6 @@
+name = "daily-stoic"
+compatibility_date = "2025-05-05"
+
+kv_namespaces = [
+  { binding = "SESSION", id = "08bc6263249f42c4a9c07a2baefa0481" }
+]
