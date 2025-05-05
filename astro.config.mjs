@@ -19,10 +19,9 @@ export default defineConfig({
     },
   },
   integrations: [react()],
-  adapter:
-    import.meta.env.PUBLIC_ENV === "local"
-      ? node({
-          mode: "middleware",
-        })
-      : cloudflare(),
+  adapter: import.meta.env.PROD
+    ? cloudflare()
+    : node({
+        mode: "middleware",
+      }),
 });
