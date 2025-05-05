@@ -46,7 +46,7 @@ Upon submission of the form (with each answer limited to 500 characters), the sy
 - **CI/CD and Hosting:**
 
   - GitHub Actions (for continuous integration)
-  - DigitalOcean (Docker-based deployment)
+  - Cloudflare Pages (Hosting)
 
 - **Testing:**
   - Vitest + React Testing Library (testy jednostkowe)
